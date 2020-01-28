@@ -1,0 +1,125 @@
+body {
+    background-color: #fcfcfc;
+}
+
+/*-------------Header-------------*/
+
+header {
+    text-align: left;
+    padding: 10px 20px 5px 20px;
+    margin: -16px -8px -16px -8px;
+    background-color:#345c82;
+    color:white;
+}
+
+header h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    letter-spacing: 3px;
+    margin-bottom:0px;
+    width:220px;
+}
+
+header p {
+    margin-top:0px;
+    width:220px;
+}
+
+/*-------------navBar-------------*/
+
+.navBar ul {
+    list-style-type: none;
+    padding: 0;
+    margin-left:-8px;
+    width: 275px;
+    background-color: #f1f1f1;
+    position: relative;
+    height: 100%;
+    padding:5px;
+}
+
+.navBar li a, .navBar li p {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+    margin:0px;
+}
+
+.navBar li p {
+    color:lightgray;
+}
+
+.navBar li a.active {
+    background-color: #d9b310;
+    color: white;
+}
+
+.navBar li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+.navBar li p:hover {
+    background-color: #e4e4e4;
+}
+
+/*-------------Content-------------*/
+
+.content {
+    text-align: left;
+    margin: 50px 0px 0px 315px;
+    padding-bottom:50px;
+    font-family: Calibri, Helvetica, sans-serif;
+    color: #396893;
+    position: absolute;
+    top:60px;
+}
+.content ul {
+    position:relative;
+    left:-10px;
+}
+
+.content h2 {
+    margin: 3px 0px;
+}
+
+.content .bold {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.blueBox {
+    background-color: #ffffff;
+    padding: 5px 20px;
+    margin: 10px 0px;
+    width: 785px;
+    border-radius:3px;
+    border-left: solid 4px #396893;
+    box-shadow: 5px 5px 5px #d1d1d1;
+}
+
+.content table, th, td {
+    border-collapse: collapse;
+    font-weight: normal;
+}
+
+.content td, th {
+    padding-right: 15px;
+}
+
+.content .indent {
+    margin: 0px 20px 20px 15px;
+}
+
+.content .small {
+    font-weight: normal;
+    font-size: 18px;
+}
+
+.content img {
+    margin-left: 15px;
+    max-width:450px;
+    border: solid 1px #396893;
+}

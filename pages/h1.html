@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <title>Linux-palvelimet</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+</head>
+<body>
+    <header>
+        <h2>Linux-palvelimet Haaga-Helia</h2>
+        <p>Kristian Koponen</p>
+    </header>
+    <div class="navBar">
+        <ul>
+            <li><a class="active" href="h1.html"><b>Harjoitus 1</b><br>Live-tikku ja Linuxin testaus</a></li>
+            <li><p>Harjoitus 2</p></li>
+            <li><p>Harjoitus 3</p></li>
+            <li><p>Harjoitus 4</p></li>
+            <li><p>Harjoitus 5</p></li>
+            <li><p>Harjoitus 6</p></li>
+            <li><p>Harjoitus 7</p></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h2>Linux Live-tikun luonti ja testaus</h2>
+        <span>28.01.-10, Kristian Koponen</span>
+        <div class="blueBox">
+            <h3>Tehtävänanto<br><span class="small"><a href="http://terokarvinen.com/2020/aikataulu-linux-palvelimet-ict4tn021-3010-torstai-aamu-alkukevat-2020-5-op#h1">Linux-palvelimet h1</a></span></h3>
+            <ul>
+                <li>
+                    Tee oma Linux-livetikku. Kokeile sitä jossain muussa kuin koulun koneessa.
+                </li>
+                <li>
+                    Listaa testaamasi koneen rauta (‘sudo lshw -short -sanitize’).
+                </li>
+                <li>
+                    Asenna kolme itsellesi uutta ohjelmaa. Kokeile kutakin ohjelmaa sen pääasiallisessa käyttötarkoituksessa.
+                </li>
+                <li>
+                    Mitä lisenssiä kukin näistä ohjelmista käyttää? Selitä lyhyesti, mitä oikeuksia ja velvolisuuksia tuosta lisenssistä seuraa.
+                </li>
+                <li>
+                    Listaa käyttämäsi ohjelmat (esim. MS Word), kunkin ohjelman käyttötarkoitus (esim. Tekstinkäsittely) ja vastaava vapaa Linux-ohjelma (esim. LibreOffice Writer). Jos johonkin tarkoitukseen ei löydy vapaata Linux-ohjelmaa, listaa sekin.
+                </li>
+            </ul>
+        </div>
+        <div class="blueBox">
+            <h3>Käytetyt laitteet</h3>
+            <p class="bold">Lenovo ThinkPad X220</p>
+            <table>
+                <tr>
+                    <th>Prosessori:</th>
+                    <th>Intel(R) Core(TM) i5-2540M @ 2.60Ghz</th>
+                </tr>
+                <tr>
+                    <th>Keskusmuisti:</th>
+                    <th>4GiB 1333Mhz DDR3</th>
+                </tr>
+                <tr>
+                    <th>Näytönohjain:</th>
+                    <th>Intel HD Graphics 3000</th>
+                </tr>
+                <tr>
+                    <th>Käyttöjärjestelmä:</th>
+                    <th>Windows 10 64-bit</th>
+                </tr>
+            </table>
+            <p class="bold">SanDisk Ultra USB 3.0 32 GB</p>
+            <br>
+        </div>
+        <div class="blueBox">
+            <h3>Live-tikun luominen ja testaus</h3>
+            <p class="bold">17:14</p>
+            <p class="indent">Käytän tikun luomiseen Windows 10 käyttöjärjestelmää, joten latasin Rufus 3.8 live USB-tikun luontiohjelman. Latasin myös xubuntu 18.04.3 amd64 .iso tiedoston torrentilla. Aloin sitten luomaan live-tikkua.</p>
+            <a href="../img/rufus_settings.jpg"><img src="../img/rufus_settings.jpg" alt="Rufus asetukset"></a>
+            <p class="indent">Laitoin kuvan mukaiset asetukset ja painoin ”Start” -painiketta.</p>
+            <a href="../img/rufus_download.jpg"><img src="../img/rufus_download.jpg" alt="Rufus lataus"></a>
+            <p class="indent">Vastaan tuli kuitenkin ilmoitus tarvittavasta latauksesta. Painoin tässä kohtaa ”Yes”.</p>
+            <a href="../img/rufus_iso.jpg"><img src="../img/rufus_iso.jpg" alt="Rufus ISO"></a>
+            <p class="indent">Rufus muistutti mitä olen tekemässä ja kysyi haluanko luoda levykuvan ISO vai DD -moodilla. Jatkoin suositellulla ISO:lla.</p>
+            <p class="indent">Live-tikun luonti tapahtui muutamassa minuutissa ilman valituksia.</p>
+            <p class="bold">17:30</p>
+            <p class="indent">Boottasin läppärin live-tikulta. Xubuntu käynnistyi normaalisti. Ruutuun avautui Asennus-ikkuna, jossa
+            kysyttiin käyttökieltä ja annettiin vaihtoehto Xubuntun kokeiluun tai Asentamiseen. Valitsin kieleksi Suomi ja painoin ”Kokeile Xubuntua”.
+            </p>
+            <p class="bold">17:34</p>
+            <p class="indent">Live-tikun luonti onnistui moitteettomasti. Lyhyt testaus osoitti että näppäimistö, hiiri, wi-fi, netin selaus toimi. Terminaali-komennolla ”sudo lshw -short -sanitize” sain koneen speksit näkyviin.
+            </p>
+        </div>
+        <div class="blueBox">
+            <h3>Ohjelmien asennus</h3>
+            <p class="bold">18:16</p>
+            <p class="indent">Päivitin ja asensin kolme ohjelmaa terminaalin avulla <a href="https://mpv.io/">mpv</a> mediantoisto-ohjelman, <a href="https://krita.org/en/">Krita</a> kuvankäsittelyohjelman sekä <a href="http://bluefish.openoffice.nl/index.html">Bluefish</a> tekstinkäsittelyohjelman.</p>
+            <ul>
+                <li>sudo apt-get update</li>
+                <li>sudo apt-get install mpv</li>
+                <li>sudo apt-get install krita</li>
+                <li>sudo apt-get install bluefish</li>
+            </ul>
+            <p class="bold">18:29</p>
+            <p class="indent">Kaikki asentui ongelmitta ja testasin ohjelmia. mpv pyöritti netistä lataamani mp4-tiedoston, Kritalla sain piirrettyä pingviinin (kts. kuva) ja Bluefishillä sain kirjoitettua Hello World html-sivun. Kaikki siis toimi peruskäytössä kuten piti.
+            </p>
+            <a href="../img/krita_pingu.jpg"><img src="../img/krita_pingu.jpg" alt="Krita pingviini"></a>
+            <p class="indent">Pingviini-piirros jäljentelee <a href="https://en.wikipedia.org/wiki/Tux_%28mascot%29">"Tux"</a> Linux-maskottia.</p>
+        </div>
+        <div class="blueBox">
+            <h3>Ohjelmien lisenssit</h3>
+            <ul>
+                <li>mpv käyttää pääosin GPL v2+ lisenssiä, mutta osa ohjelmasta käyttää LGPL v2.1 lisenssiä.</li>
+                <li>Krita käyttää GPL3 v3 lisenssiä</li>
+                <li>Bluefish käyttää GPL lisenssiä</li>
+            </ul>
+            <p class="indent"><span class="bold">GNU General Public License v2 / GNU General Public License v3</span><br>
+            Sallii ohjelmiston ja sen lähdekoodin kopioimisen, jakamisen, muuntamisen ja kaupallisen käytön. Täytyy ilmoittaa muutokset sekä lisensoida johdettu ohjelma ja koodi GPL lisenssin alla.</p>
+            <p class="indent"><span class="bold">GNU Lesser General Public License v2.1</span><br>
+            Sallii ohjelmiston ja sen lähdekoodin kopioimisen, jakamisen, muuntamisen ja kaupallisen käytön. Täytyy ilmoittaa muutokset, se että käyttää LGPL-lisensoitua koodia ja lisensoida kaikki omat muutokset LGPLv2.1 lisenssin alla.  Lähdekoodi on tehtävä julkiseksi.</p>
+        </div>
+        <div class="blueBox">
+            <h3>Käyttämiäni ohjelmia <br><span class="small">Sekä niiden käyttötarkoitusta vastaavia vapaita Linux ohjelmia</span></h3>
+            <p class="indent">MS Office ohjelmille (Word, Excel, Powerpoint) löytyy Linuxille vastaavat LibreOffice ohjelmista	(Writer, Calc, Impress).</p>
+            <p class="indent">Photoshopille löytyy useita vaihtoehtoja kuten GIMP, InkScape ja Krita. Joidenkin käyttötarkoitus on
+            rajallisempi, mutta niitä voidaan käyttää yhdessä saamaan sama lopputulos.
+            </p>
+            <p class="indent">Notepad++, sekä Brackets (tämä löytyy Linuxille) voidaan korvata jo aiemmin testaamallani Bluefishillä.</p>
+            <p class="indent">CCleaner puhdistusohjelma on Linuxilla vähemmän välttämätön sillä Linuxilla ei ole rekisteriä ja väliaikaistiedostot puhdistuvat automaattisesti. Pakettejen ja selainten tallentamien tietojen puhdistamiseen voi käyttää terminaalikomentoja, mutta mikäli tähän halutaan kuitenkin vaihtoehtoinen ohjelma voidaan käyttää Stacer, BleachBit tai Sweeper ohjelmia.</p>
+            <p class="indent">Muita ohjelmia kuten VLC Player mediantoisto-ohjelma, Spotify musiikin suoratoisto-ohjelma, Steam videopelien jakelualusta, Blender 3D-mallinnusohjelma, Unreal Engine -pelimoottori,  Eclipse ohjelmointiympäristö ja Slack pikaviestintäsovellus voi käyttää Linuxilla. Näistä Unreal Engine, Spotify ja Steam eivät ole vapaita ja niille on vaikea löytää käyttötarkoituksen vuoksi vertaista vapaista ohjelmista. VLC:n voin halutessani korvata aiemmin testaamallani mpv:llä.</p>
+        </div>
+        <div class="blueBox">
+            <h3>Lähteet</h3>
+            <p>
+                <a href="http://terokarvinen.com/2006/raportin-kirjoittaminen-4">http://terokarvinen.com/2006/raportin-kirjoittaminen-4</a><br>
+                <a href="http://terokarvinen.com/2020/aikataulu-linux-palvelimet-ict4tn021-3010-torstai-aamu-alkukevat-2020-5-op#h1">http://terokarvinen.com/2020/aikataulu-linux-palvelimet-ict4tn021-3010-torstai-aamu-alkukevat-2020-5-op#h1</a><br>
+                <a href="https://rufus.ie/">https://rufus.ie/</a><br>
+                <a href="https://xubuntu.org/">https://xubuntu.org/</a><br>
+                <a href="https://github.com/mpv-player/mpv">https://github.com/mpv-player/mpv</a><br>
+                <a href="https://github.com/KDE/krita/blob/master/COPYING">https://github.com/KDE/krita/blob/master/COPYING</a><br>
+                <a href="http://bluefish.openoffice.nl/index.html">http://bluefish.openoffice.nl/index.html</a><br>
+                <a href="https://tldrlegal.com/license/gnu-general-public-license-v2">https://tldrlegal.com/license/gnu-general-public-license-v2</a><br>
+                <a href="https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)">https://tldrlegal.com/license/gnu-general-public-license-v3-(gpl-3)</a><br>
+                <a href="https://tldrlegal.com/license/gnu-lesser-general-public-license-v2.1-(lgpl-2.1)">https://tldrlegal.com/license/gnu-lesser-general-public-license-v2.1-(lgpl-2.1)</a><br>
+                <a href="https://itsfoss.com/ccleaner-alternatives-ubuntu-linux/">https://itsfoss.com/ccleaner-alternatives-ubuntu-linux/</a><br>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
