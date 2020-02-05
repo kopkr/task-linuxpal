@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <title>Linux-palvelimet</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+</head>
+<body>
+    <header>
+        <h2>Linux-palvelimet Haaga-Helia</h2>
+        <p>Kristian Koponen</p>
+    </header>
+    <div class="navBar">
+        <ul>
+            <li><a href="h1.html"><b>Harjoitus 1</b><br>Livetikku ja Linuxin testaus</a></li>
+            <li><a class="active" href="h2.html"><b>Harjoitus 2</b><br>Lokimuutoksia, SSH-demoni ja apt-get</a></li>
+            <li><p>Harjoitus 3</p></li>
+            <li><p>Harjoitus 4</p></li>
+            <li><p>Harjoitus 5</p></li>
+            <li><p>Harjoitus 6</p></li>
+            <li><p>Harjoitus 7</p></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h2>Lokimuutoksia, SSH-demoni ja apt-get</h2>
+        <span>04.02.-20, Kristian Koponen</span>
+        <div class="blueBox">
+            <h3>Tehtävänanto<br><span class="small"><a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h2">Linux-palvelimet h2</a></span></h3>
+            <ul>
+                <li>
+                    Aiheuta lokiin kaksi eri tapahtumaa: yksi esimerkki onnistuneesta ja yksi esimerkki epäonnistuneesta tai kielletystä toimenpiteestä. Analysoi rivit yksityiskohtaisesti.
+                </li>
+                <li>
+                    Vapaaehtoinen kohta, ei ole opetettu vielä: Asenna SSH-demoni. Kokeile omalla ssh-palvelimellasi jotain seuraavista: ssh-copy-id, sshfs, scp tai git.
+                </li>
+                <li>
+                    Tee unelmien apt-get -komento: yksi komentorivi, joka asentaa suosikkiohjelmasi.
+                </li>
+                <li>
+                    Asenna komentokehotteen paketinhallinnasta kolme itsellesi uutta komentorivillä toimivaa ohjelmaa. Kokeile kutakin ohjelmaa sen pääasiallisessa käyttötarkoituksessa.
+                </li>
+            </ul>
+        </div>
+        <div class="blueBox">
+            <h3>Käytetyt laitteet</h3>
+            <p class="bold">Lenovo ThinkPad X220</p>
+            <table>
+                <tr>
+                    <th>Prosessori:</th>
+                    <th>Intel(R) Core(TM) i5-2540M @ 2.60Ghz</th>
+                </tr>
+                <tr>
+                    <th>Keskusmuisti:</th>
+                    <th>4GiB 1333Mhz DDR3</th>
+                </tr>
+                <tr>
+                    <th>Näytönohjain:</th>
+                    <th>Intel HD Graphics 3000</th>
+                </tr>
+                <tr>
+                    <th>Käyttöjärjestelmä:</th>
+                    <th>Windows 10 64-bit</th>
+                </tr>
+            </table>
+            <p class="bold">SanDisk Ultra USB 3.0 32 GB</p><span>xubuntu 18.04.3 amd64</span><br><br>
+        </div>
+        <div class="blueBox">
+            <h3>Lokimerkinnät</h3>
+            <p>Tarkoituksena oli luoda lokiin kaksi tapahtumaa. Toinen onnistuneesta tapahtumasta ja toinen epäonnistuneesta. Avasin järjestelmälokin komennolla <span class="command">cat /var/log/syslog</span>. Voin myös käyttää komentoa <span class="command">tail /var/log/syslog</span> nähdäkseni viimeiset 10 riviä.</p>
+            <p>Käytän läppärissäni langatonta hiirtä, joten yhdistin sen koneeni USB-porttiin. Mietin näkyisikö esimerkiksi tämä tapahtuma lokissa ja tottahan toki siellähän se näkyi ja tietoa oli enemmän kuin ”laite yhdistetty”. Esimerkiksi mitä liitettiin, miltä valmistajalta ja hiiren mallikin. Laskisin tämän onnistuneeksi tapahtumaksi lokissa.
+            </p>
+            <a href="../img/hiiri.jpg"><img src="../img/hiiri.jpg"></a><br>
+            <span>(Klikkaa kuva suuremmaksi)</span>
+            <p>Seuraavaksi yritin luoda live-Linuxin oletuskäyttäjälle ”xubuntu” uutta salasanaa, jotta voin aiheuttaa tämän avulla virheen lokissa. Virhe tulikin jo salasanan luonnissa. Syötin komentoriville <span class="command">passwd xubuntu</span>. Tämä toiminto ei onnistunut. Katsoin virheilmoituksen auth.logista komennolla <span class="command">tail /var/log/auth.log</span>. Virhe johtui autentikointi-rajoitteesta. Tämä virhe korjaantui tietenkin laittamalla komennon eteen <span class="command">sudo</span>.</p>
+            <a href="../img/passwd.jpg"><img src="../img/passwd.jpg"></a><br>
+            <span>(Klikkaa kuva suuremmaksi)</span>
+        </div>
+        <div class="blueBox">
+            <h3>SSH-demoni</h3>
+            <p>(Työn alla)</p>
+        </div>
+        <div class="blueBox">
+            <h3>Unelmien apt-get -komento</h3>
+            <p>Alla olevalla komennolla saan yleishyödyllisiä ohjelmia asennettua.
+                <br><span class="command">sudo apt-get update && sudo apt-get install vlc ffmpeg gimp blender pinta deluge</span>
+            </p>
+            <ul>
+                <li>VLC - Mediantoisto</li>
+                <li>FFmpeg - Kokoelma ohjelmistoja, joilla voidaan käsitellä videota, ääntä ja muita mediatiedostoja komentorivillä.</li>
+                <li>Blender - Avoin3D-mallinnus ja animointi-työkalu.</li>
+                <li>GIMP - Ammattitasoinen kuvankäsittelyohjelma.</li>
+                <li>Pinta - Yksinkertaisempi ohjelma nopeaan kuvankäsittelyyn. Esim. kroppaus ja kuvien yhdistely.</li>
+                <li>Deluge - Bittorrent asiakasohjelma.</li>
+            </ul>
+            <p>Muita ohjelmia kuten Spotify voidaan asentaa Snapilla, joka tulee Ubuntuun valmiiksi asennettuna. Mikäli sitä ei kuitenkaan ole asennettu, se voidaan hakea komennolla<br><span class="command">sudo apt-get install snapd</span></p>
+        </div>
+        <div class="blueBox">
+            <h3>Komentorivillä toimivat ohjelmat</h3>
+            <p>Tässä on listattuna kolme ohjelmaa, joita voidaan käyttää Linuxin terminaalista käsin.</p>
+            <p style="font-weight:bold"><a href="https://ffmpeg.org/about.html">FFmpeg</a> (<span class="command">sudo apt-get install ffmpeg</span>)</p>
+            <p>Olen aiemmin käyttänyt FFmpegin toiminnallisuuksia GUI wrapperin avulla videotiedostojen muodon kääntämiseen, mutta konsolista käsin sen käyttö on yksinkertaisuudessaan myös helppoa. Käytän todennäköisesti tulevaisuudessa kuitenkin wrapperia, sillä se yhdistää myös kätevästi AviSynthin editointi-mahdollisuuden.</p>
+            <a href="../img/ffmpeg.jpg"><img src="../img/ffmpeg.jpg"></a><br>
+            <p style="font-weight:bold">nSnake - matopeli (<span class="command">sudo apt-get install nsnake</span>)</p>
+            <p>Peli toimii hyvin. Asetuksia voi muuttaa ennen pelin alkua. Esim. madon nopeus, seinät, syötävien ruokien määrä, jne. Pelatessa ongelmana on kuitenkin se, että mato liikkuu nopeammin ylös ja alas kuin sivuille. 6/10</p>
+            <a href="../img/nsnake.jpg"><img src="../img/nsnake.jpg"></a><br>
+            <p style="font-weight:bold">Tree - QoL konsolitoiminto (<span class="command">sudo apt-get install tree</span>)</p>
+            <p>Yksinkertaisuudessaan lisää komennon "tree", joka näyttää alakansiot ja tiedostot helpommin luettavassa rakenteessa kuin "find".</p>
+            <a href="../img/tree.jpg"><img src="../img/tree.jpg"></a><br>
+        </div>
+        <div class="blueBox">
+            <h3>Lähteet</h3>
+            <p>
+                <a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h2">http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h2</a><br>
+                <a href="https://www.cyberciti.biz/faq/ubuntu-linux-gnome-system-log-viewer/">https://www.cyberciti.biz/faq/ubuntu-linux-gnome-system-log-viewer/</a><br>
+                <a href="https://itsfoss.com/nsnake-play-classic-snake-game-linux-terminal/">https://itsfoss.com/nsnake-play-classic-snake-game-linux-terminal/</a><br>
+                <a href="https://www.reddit.com/r/commandline/comments/9b426l/best_terminal_apps/">https://www.reddit.com/r/commandline/comments/9b426l/best_terminal_apps/</a><br>
+                <a href="https://ffmpeg.org/">https://ffmpeg.org/</a><br>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
