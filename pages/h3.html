@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <title>Linux-palvelimet</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+</head>
+<body>
+    <header>
+        <h2>Linux-palvelimet Haaga-Helia</h2>
+        <p>Kristian Koponen</p>
+    </header>
+    <div class="navBar">
+        <ul>
+            <li><a href="h1.html"><b>Harjoitus 1</b><br>Livetikku ja Linuxin testaus</a></li>
+            <li><a href="h2.html"><b>Harjoitus 2</b><br>Lokimuutoksia, SSH-demoni ja apt-get</a></li>
+            <li><a class="active" href="h3.html"><b>Harjoitus 3</b><br>Apache2 asennus, testailu ja lokin tarkastelu</a></li>
+            <li><p>Harjoitus 4</p></li>
+            <li><p>Harjoitus 5</p></li>
+            <li><p>Harjoitus 6</p></li>
+            <li><p>Harjoitus 7</p></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h2>Apache2 asennus, testailu ja lokin tarkastelu</h2>
+        <span>11.02.-20, Kristian Koponen</span>
+        <div class="blueBox">
+            <h3>Tehtävänanto<br><span class="small"><a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h3">Linux-palvelimet h3</a></span></h3>
+            <ul>
+                <li>
+                    <a href="h3.html#h3a"> Asenna Apache, laita käyttäjien kotisivut toimimaan. Testaa esimerkkikotisivulla.</a>
+                </li>
+                <li>
+                    <a href="h3.html#h3h">Tee Apachelle uusi sivu, joka näkyy suoraan palvelimen pääsivulla, mutta jonka sivuja voi muokata normaalin käyttäjän oikeuksilla (name based virtual host, DocumentRoot käyttäjän kotihakemistoon).</a>
+                </li>
+                <li>
+                    <a href="h3.html#h3b">Surffaa oman palvelimesi weppisivuja. Etsi Apachen lokista esimerkki onnistuneesta (200 ok) sivulatauksesta ja epäonnistuneesta (esim 404 not found) sivulatauksesta. Analysoi rivit.</a>
+                </li>
+                <li>
+                    <a href="h3.html#h3m">Vaihda Apachen oletussivu. Eli laita palvelimen etusivulla (ilman tildeä) näkyvä sivu niin, että alkuperäinen on jonkun käyttäjän kotihakemistossa ja voit muokata sitä ilman pääkäyttäjän oikeuksia.</a>
+                </li>
+                <li>
+                    <a href="h3.html#h3dn">Laita kaksi nimeä samaan IP-osoitteeseen. Voit simuloida nimipalvelun toimintaa /etc/hosts -tiedoston avulla. Eli niin, että samalla palvelimella osoitteella teronlenkkisivu.com tulee eri sisältö kuin osoitteella opipentest.com.</a>
+                </li>
+            </ul>
+        </div>
+        <div class="blueBox">
+            <h3>Käytetyt laitteet</h3>
+            <p class="bold">Lenovo ThinkPad X220</p>
+            <table>
+                <tr>
+                    <th>Prosessori:</th>
+                    <th>Intel(R) Core(TM) i5-2540M @ 2.60Ghz</th>
+                </tr>
+                <tr>
+                    <th>Keskusmuisti:</th>
+                    <th>4GiB 1333Mhz DDR3</th>
+                </tr>
+                <tr>
+                    <th>Näytönohjain:</th>
+                    <th>Intel HD Graphics 3000</th>
+                </tr>
+                <tr>
+                    <th>Käyttöjärjestelmä:</th>
+                    <th>Windows 10 64-bit</th>
+                </tr>
+            </table>
+            <p class="bold">SanDisk Ultra USB 3.0 32 GB</p><span>xubuntu 18.04.3 amd64 -live</span><br><br>
+        </div>
+        <div class="blueBox">
+            <h3 id="h3a">Apachen asentaminen ja käyttäjän kotisivu</h3>
+            <p class="timeText">19:25</p>
+            <p class="indent">Aloitan päivityksellä, eli komennoilla <span class="command">sudo apt-get update</span> ja <span class="command">sudo apt-get upgrade</span></p>
+            <p class="timeText">19:29</p>
+            <p class="indent">Seuraavaksi  asennan apache2 web-palvelimen komennolla <span class="command">sudo apt-get install apache2 -y</span>, testasin että sovellus toimii avaamalla selaimellani localhost -sivun. Testasin saman myös IP-osoitteellani, jonka hain komennolla <span class="command">ip addr</span>. Toimi hyvin kummallakin tavalla</p>
+            <a class="indent" href="../img/h3img1.jpg"><img src="../img/h3img1.jpg"></a><br>
+            <span class="indent">Kuten kuvasta näkyy, apache pyörii.</span><p></p>
+            <p class="timeText">19:37</p>
+            <p class="indent">Seuraavaksi luon käyttäjälle kotisivun. Userdirin aktivoimiseksi käytän komentoa <span class="command">sudo a2enmod userdir</span>. Konsoliin tulee viesti siitä, että muutoksia varten on käynnistettävä apache2 uudelleen, joka hoituu komennolla <span class="command">sudo systemctl restart apache2</span>.</p>
+            <a class="indent" href="../img/h3img2.jpg"><img src="../img/h3img2.jpg"></a><br><br>
+            <p class="timeText">19:43</p>
+            <p class="indent">Luon oletuskäyttäjälle "xubuntu" public_html kansion komennolla <span class="command">mkdir public_html</span> tämän kotihakemistoon. Luon yksinkertaisen index.html tiedoston kansioon. Navigoidaan selaimella osoitteeseen localhost/~xubuntu testataksemme, että käyttäjän sivu toimii.</p>
+            <a class="indent" href="../img/h3img3.jpg"><img src="../img/h3img3.jpg"></a><br><br>
+        </div>
+        <div class="blueBox">
+            <h3 id="h3h">Name Based Virtual Host ja DocumentRoot käyttäjän kotihakemistoon</h3>
+            <p>Aloitetaan navigoimalla sites-available kansioon komennolla <span class="command">cd /etc/apache2/sites-available/</span> ja luomalla uusi tiedosto komennolla <span class="command">sudoedit xubtest.com.conf</span>. Kirjoitetaan sinne servername, alias ja kansio johon halutaan viitata. Aktivoidaan konfiguraatio komennolla <span class="command">sudo a2ensite xubtest.com.conf</span> ja luetaan konfiguraatiotiedostot uudelleen komennolla <span class="command">sudo systemctl reload apache2</span>.</p>
+            <a href="../img/h3img4.jpg"><img src="../img/h3img4.jpg"></a><br><br>
+        </div>
+        <div class="blueBox">
+            <h3 id="h3b">Apachen lokit</h3>
+            <p>Lähden nyt testaamaan edellistä osaa. Sillä xubtest.com domainia ei oikeasti ole, ihan aluksi muokkaan /etc/hosts tiedostoa ja ohjaan siellä selaimen oikeaan paikkaan. Kirjoitan komennon <span class="command">sudo nano /etc/hosts</span> ja lisään rivin kyseiselle osoitteelle.</p>
+            <a href="../img/h3img5.jpg"><img src="../img/h3img5.jpg"></a><br>
+            <p>Koitan nyt hakea selaimella osoitetta xubtest.com. Sieltä tulee virhe "403 Forbidden". Tarkastelen apachen virhelokia komennolla <span class="command">tail -n 1 /var/log/apache2/error.log</span> nähdäksemme viimeisimmän tapahtuman. Virheilmoitus ei ollut mitä kuvittelin. Odotin valitusta puuttuvasta hakemistosta, sillä konfiguraatio-tiedosto viittaa xubtest.com kansioon käyttäjän kotihakemistossa. Sainkin seuraavanlaisen virheilmoituksen.</p>
+            <p class="code">[Tue Feb 11 21:05:03.873605 2020] [authz_core:error] [pid 19306:tid 140272692360960] [client 127.0.0.1:47384] AH01630: client denied by server configuration: /home/xubuntu/xubtest.com</p>
+            <p>Luen nyt Apachen dokumentointia selvittääkseni asiaa. Ensimmäisenä näemme ajankohdan, jolloin virhe tapahtui. Seuraavana näkyy moduuli, joka tuotti lokimerkinnän. Tätä seuraa prosessin ID ja thread ID. Ennen jyvälle pääsemistä näkyy vielä asiakas joka virheen aiheutti. Viimeisimpänä näkyy oleellisin, eli mikä virhe tuli ja sen tunnus. Tässä tapauksessa virheilmoitus "AH01630" kertoo, että asiakasohjelman pääsy on evätty palvelinkonfiguraation vuoksi, vaikka konfiguraatiotiedostossa oli kirjoitettu "Require all granted" sille kuuluvalle paikalle.</p>
+            <p>Etsin virhekoodilla lisätietoa stackoverflow:sta ja siellä eräs käyttäjä kertoo, että virhe tulee virheellisestä DocumentRoot hakemistosta, eli juuri mitä odotin. Korjaan asian luomalla kotihakemistoon xubtest.com kansion komennolla <span class="command">cd && mkdir xubtest.com</span> ja luon kopioin sinne public_html kansioon luomani index.html tiedoston komennolla <span class="command">cp public_html/index.html xubtest.com/</span>.</p>
+            <p>Nyt kun yritän päästä sivulle xubtest.com, tulee luomani index.html -sivu esiin. Katson vielä access-lokia komennolla <span class="command">tail -n 1 var/log/apache2/access.log</span> ja saan seuraavanlaisen rivin.</p>
+            <p class="code">127.0.0.1 - - [11/Feb/2020:21:22:32 +0000] "GET / HTTP/1.1" 200 301 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0"</p>
+            <p>Ensimmäisenä näemme localhostin IP-osoitteen. Yhteys tuli tästä koneesta. Toisena näemme ajankohdan, jolloin yhteyspyyntö tuli. Seuraavan näemme tietoa pyyntitavasta. Tässä tapauksessa GET-metodilla, HTTP 1.1:n yli. Seuraavaksi on status-koodi; 200 tarkoittaa OK. Tämän numeron jälkeen näemme tarjoillun sisällön kokoa. Välissä on mysteerinen viiva lainausmerkeissä. Lopputieto on selaimen yksityiskohtia. Mozilla Firefox 64-bittiselle Ubuntulle, joka toimii Gecko-selainmoottorilla.</p>
+        </div>
+        <div class="blueBox">
+            <h3 id="h3m">Oletussivun vaihtaminen.</h3>
+            <p>Tässä vaiheessa meillä on toimiva index.html -sivu käyttäjän kotihakemistossa, joka tarjoillaan xubtest.com osoitteella, eli eri sisältö kuin mitä localhostiin tulee oletusarvoisesti 000-default.conf konfiguraation mukaisesti. Nyt palvelimen IP-osoitteella aukeaa apache2:n oletussivu /var/www/ -kansiosta.</p>
+            <p>Haluan vaihtaa oletussivun palvelimella. Voisin käyttää komentoa <span class="command">sudo a2dissite 000-default.conf</span>, ottaakseni oletus-konfiguraation pois päältä ja priorisoidakseni xubtest.com.conf tiedoston, mutta mikäli aion luoda uusia tiedostoja, oletus-sivu määrittyy konfiguraatiotiedostojen aakkosjärjestyksen mukaan. 000-alkuinen oletustiedosto on siis hyvä olla.</p>
+            <p>Käynkin siis muokkaamassa 000-default.conf tiedoston DocumentRoot kohtaa ja lisään sinne luvan "Require all granted" /etc/apache2/sites-available/ -kansiossa komennolla <span class="command">sudoedit 000-default.conf</span> ja lataan apache2:n uudelleen komennolla <span class="command">sudo systemctl reload apache2</span></p>
+            <a href="../img/h3img6.jpg"><img src="../img/h3img6.jpg"></a><br>
+            <p>Muokkasin hieman xubuntu/public_html/ -kansiossa olevaa index.html tiedostoa erottaakseni sen xubuntu/xubtest.com/ -kansiossa olevasta tiedostosta. Kokeilin avata IP-osoitteella sivun ja uudistettu index.html aukesi selaimeeni.</p>
+        </div>
+        <div class="blueBox">
+            <h3 id="h3dn">Useampi nimi samaan IP-osoitteeseen ja virheilmoitus Apachen asetustiedostossa</h3>
+            <p>Palaan tässä vaiheessa eri nimien luontiin. Hakeudumme takaisin kansioon /etc/apache2/sites-available/ ja luomme uuden .conf -tiedoston <a href="h3.html#h3h">aiemmin</a> käytettyjen komentojen tavalla. Kopioin xubtest.com tiedoston ja luon sen pohjalta uuden komennolla <span class="command">sudo cp xubtest.com.conf testagain.com.conf</span></p>
+            <p>Vaihdan sieltä xubtest.com nimen testagain.comiin. Lataan apache2:n uudelleen komennolla <span class="command">sudo systemctl reload apache2</span>.</p>
+            <a href="../img/h3img7.jpg"><img src="../img/h3img7.jpg"></a><br>
+            <p>Luodaan DocumentRootissa viitattu xubuntu/testagain.com -kansio ja sinne index.html tiedosto. Kirjoitetaan <a href="h3.html#h3b">aiemmin</a> käsiteltyyn /etc/hosts tiedostoon tarvittava testagain.com nimi samalla 127.0.0.1-osoitteella. Kokeillaan tätä selaimessa kirjoittamalla osoitekenttään testagain.com ja saadaan eri sivu näkyviin kuin xubtest.com -osoitteella tai localhostilla/IP:llä.</p>
+            <a href="../img/h3img8.jpg"><img src="../img/h3img8.jpg"></a><br><br>
+        </div>
+        <div class="blueBox">
+            <h3>Lähteet</h3>
+            <p>
+                <a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h3">http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h3</a><br>
+                <a href="http://terokarvinen.com/2008/install-apache-web-server-on-ubuntu-4">http://terokarvinen.com/2008/install-apache-web-server-on-ubuntu-4</a><br>
+                <a href="http://terokarvinen.com/2018/name-based-virtual-hosts-on-apache-multiple-websites-to-single-ip-address">http://terokarvinen.com/2018/name-based-virtual-hosts-on-apache-multiple-websites-to-single-ip-address</a><br>
+                <a href="https://www.linode.com/docs/websites/hosting-a-website-ubuntu-18-04/">https://www.linode.com/docs/websites/hosting-a-website-ubuntu-18-04/</a><br>
+                <a href="https://stackoverflow.com/questions/18392741/apache2-ah01630-client-denied-by-server-configuration">https://stackoverflow.com/questions/18392741/apache2-ah01630-client-denied-by-server-configuration</a><br>
+                <a href="https://httpd.apache.org/docs/2.4/logs.html#errorlog">https://httpd.apache.org/docs/2.4/logs.html#errorlog</a><br>
+                <a href="https://httpd.apache.org/docs/2.4/logs.html#accesslog">https://httpd.apache.org/docs/2.4/logs.html#accesslog</a><br>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

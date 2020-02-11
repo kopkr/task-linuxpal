@@ -73,8 +73,8 @@ header p {
     padding-bottom:50px;
     font-family: Calibri, Helvetica, sans-serif;
     color: #396893;
-    position: absolute;
-    top:60px;
+    position: relative;
+    top:-360px;
 }
 .content ul {
     position:relative;
@@ -134,4 +134,11 @@ header p {
 .command {
     color: #af9252;
     font-weight:bold;
+}
+
+.code {
+    background-color: darkslategray;
+    color:white;
+    padding:5px 10px;
+    margin:0px 5px;
 }
