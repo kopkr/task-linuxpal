@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <title>Linux-palvelimet</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+</head>
+<body>
+    <header>
+        <h2>Linux-palvelimet <br>Harjoitus 5</h2>
+        <p>Kristian Koponen</p>
+    </header>
+    <div class="navBar">
+        <ul>
+            <li><a href="h1.html"><b>Harjoitus 1</b><br>Livetikku ja Linuxin testaus</a></li>
+            <li><a href="h2.html"><b>Harjoitus 2</b><br>Lokimuutoksia ja apt-get</a></li>
+            <li><a href="h3.html"><b>Harjoitus 3</b><br>Apache2 asennus, testailu ja lokin tarkastelu</a></li>
+            <li><a href="h4.html"><b>Harjoitus 4</b><br>Virtuaalipalvelin ja nimipalvelu</a></li>
+            <li><a class="active" href="h5.html"><b>Harjoitus 5</b><br>Python Flask</a></li>
+            <li><p>Harjoitus 6</p></li>
+            <li><p>Harjoitus 7</p></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h2>Python Flask</h2>
+        <span>03.03.2020, Kristian Koponen</span>
+        <div class="blueBox">
+            <h3>Tehtävänanto<br><span class="small"><a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h5">Linux-palvelimet h5</a></span></h3>
+            <ul>
+                <li>
+                    <a href="h5.html#h5a">Hello Flask! Tee Python Flask "hei maailma" kehitysympäristössä.</a>
+                </li>
+                <li>
+                    <a href="h5.html#h5b">Tuotanto-Flask. Tee tuotantotyyppinen asennus Flaskista käyttäen Apachen WSGI-modulia. Kokeile, että pystyt muokkaamaan koodia ilman sudoa ja saat uuden version käyttöön käynnistämättä Apachea uudelleen. </a>
+                </li>
+                <li>
+                    <a href="h5.html#h5c">Lisää tuotanto-Flaskiin muotit (templates).</a>
+                </li>
+                <li>
+                    <a href="h5.html#h5d">Sun IP. Tee Flask-sivu, jolla näkyy tietoja käyttäjästä. Esimerkiksi request.user_agent.string, request.remote_addr. Muista "from flask import request".</a>
+                </li>
+            </ul>
+        </div>
+        <div class="blueBox">
+            <h3>Käytetyt laitteet</h3>
+            <p class="bold">Lenovo ThinkPad X220</p>
+            <table>
+                <tr>
+                    <th>Prosessori:</th>
+                    <th>Intel(R) Core(TM) i5-2540M @ 2.60Ghz</th>
+                </tr>
+                <tr>
+                    <th>Keskusmuisti:</th>
+                    <th>4GiB 1333Mhz DDR3</th>
+                </tr>
+                <tr>
+                    <th>Näytönohjain:</th>
+                    <th>Intel HD Graphics 3000</th>
+                </tr>
+                <tr>
+                    <th>Käyttöjärjestelmä:</th>
+                    <th>Windows 10 64-bit</th>
+                </tr>
+            </table>
+            <p class="bold">SanDisk Ultra USB 3.0 32 GB</p><span>xubuntu 18.04.3 amd64 -live</span><br><br>
+        </div>
+        
+        <div class="blueBox">
+            <h3 id="h5a">Hello Flask!</h3>
+            <p>Asennetaan Flask web framework komennolla </p>
+            <p class="code">$ sudo apt-get update && sudo apt-get install python3-flask -y</p>
+            <p>Luodaan käyttäjän kotihakemistoon uusi kansio ja lisätään tekstitiedosto komennolla</p>
+            <p class="code">$ mkdir helloworld && nano helloworld/hello.py</p><br>
+            <p class=code>  
+                from flask import Flask
+                <br>app = Flask(__name__)
+                <br>
+                <br>@app.route("/")
+                <br>def hello():
+                <br>&nbsp;&nbsp;&nbsp;return "Hello Flask!"
+                <br>
+                <br>app.run(debug=True)
+            </p>
+            <p>Käynnistetään sovellus komennolla</p>
+            <p class="code">$ python3 helloworld/hello.py</p>
+            <p>Käydään katsomassa sovellus selaimella osoitteessa localhost:5000</p>
+            <a href="../img/h5/h5img1.jpg"><img src="../img/h5/h5img1.jpg"></a><br>
+        </div>
+        <div class="blueBox">
+            <h3 id="h5b">Tuotanto-Flask</h3>
+            <h4>Alkutoimet</h4>
+            <p>Asennetaan apache.</p>
+            <p class="code">$ sudo apt-get update && sudo apt-get -y install apache2</p>
+            <p>Korvataan apachen oletussivun sisältö ja testataan, että apache on käynnissä.</p>
+            <p class="code">
+                $ echo "Apache toimii"|sudo tee /var/www/html/index.html<br>
+                $ curl localhost<br>
+            </p>
+            <a href="../img/h5/h5img2.jpg"><img src="../img/h5/h5img2.jpg"></a><br>
+            <p>Luodaan uusi käyttäjä sovellukselle.</p>
+            <p class="code">$ sudo adduser flaskwsgi</p>
+            <p>Tällä käyttäjällä ei tarvitse kirjautua sisään, lukitaan salasanakirjautuminen.</p>
+            <p class="code">$ sudo usermod --lock flaskwsgi</p>
+            <p>Lisätään oma käyttäjä uuden käyttäjän ryhmään flaskwsgi</p>
+            <p class="code">$ sudo adduser xubuntu flaskwsgi</p>
+            <p>Kirjaudutaan ulos ja takaisin, jotta ryhmä tulee aktiiviseksi.</p>
+            <br>
+            <h4>Virtual Host</h4>
+            <p>Asennetaan python3 WSGI-moduuli ja käynnistetään apache uudelleen.</p>
+            <p class="code">
+                $ sudo apt-get install libapache2-mod-wsgi-py3<br>
+                $ sudo systemctl restart apache2
+            </p>
+            <p>Luodaan virtual host python flaskille</p>
+            <p class="code">$ sudoedit /etc/apache2/sites-available/flaskwsgi.conf</p>
+            <p class="code">
+                &lt;VirtualHost *:80&gt;
+                <br>&nbsp;&nbsp;&nbsp;ServerName flask.example.com
+                <br>
+                <br>&nbsp;&nbsp;&nbsp;WSGIDaemonProcess flaskwsgi user=flaskwsgi group=flaskwsgi threads=5
+                <br>&nbsp;&nbsp;&nbsp;WSGIScriptAlias / /home/flaskwsgi/public_wsgi/flask.wsgi
+                <br>
+                <br>&nbsp;&nbsp;&nbsp;&lt;Directory /home/flaskwsgi/public_wsgi/&gt;
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WSGIScriptReloading On
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WSGIProcessGroup flaskwsgi
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;WSGIApplicationGroup %{GLOBAL}
+                <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Require all granted
+                <br>&nbsp;&nbsp;&nbsp;&lt;/Directory&gt;
+                <br>&lt;/VirtualHost&gt;
+            </p>
+            <p>Aktivoidaan uusi flaskwsgi.conf tiedosto ja deaktivoidaan oletuskonfiguraatio.</p>
+            <p class="code">
+                $ sudo a2ensite flaskwsgi.conf<br>
+                $ sudo a2dissite 000-default.conf
+            </p>
+            <p>Tarkistetaan konfiguraatiotiedosto.</p>
+            <p class="code">$ apache2ctl configtest<br>
+            Syntax OK</p>
+            <p>Käynnistetään taas apache uudelleen.</p>
+            <p class="code">sudo systemctl restart apache2</p>
+            <br>
+            <h4>Hakemiston ja tiedostojen luonti</h4>
+            <p>Testataan tässä välissä mitä on saatu aikaan.</p>
+            <p class="code">
+                $ curl localhost<br>
+                $ tail -1 /var/log/apache2/error.log
+            </p>
+            <a href="../img/h5/h5img3.jpg"><img src="../img/h5/h5img3.jpg"></a><br>
+            <p>Saadaan 403-virhe. Tämä johtuu konfiguraatio-tiedostossa viitatun kansion puuttumisesta, joten luodaan kyseinen kansio.</p>
+            <p class="code">$ sudo mkdir /home/flaskwsgi/public_wsgi</p>
+            <p>Nyt on luotu hakemisto sovellukselle, mutta se on käyttäjän flaskwsgi hakemistossa. Jotta voidaan muokata tiedostoja ilman pääkäyttäjän lupaa ja hyötyä siitä että oma käyttäjä on flaskwsgi ryhmässä, muokataan luvat kansiolle</p>
+            <p class="code">$ sudo chown flaskwsgi:flaskwsgi /home/flaskwsgi/public_wsgi<br>
+            $ sudo chmod g=rwxs /home/flaskwsgi/public_wsgi</p>
+            <p>Tarkastetaan luvat</p>
+            <p class="code">
+                $ ls -ld /home/flaskwsgi/public_wsgi<br>
+                drwxrwsr-x 2 flaskwsgi flaskwsgi 40 Mar 3 21:43 /home/flaskwsgi/public_wsgi           
+            </p>
+            <p>Kokeillaan uudestaan</p>
+            <p class="code">
+                $ curl localhost<br>
+                $ tail -1 /var/log/apache2/error.log
+            </p>
+            <a href="../img/h5/h5img4.jpg"><img src="../img/h5/h5img4.jpg"></a><br>
+            <p>Tällä kertaa tulee 404-virhe, joka taas johtuu puuttuvasta WSGI-tiedostosta. Luodaan uusi tekstitiedosto, joka voidaan nyt tehdä ilman sudoa</p>
+            <p class="code">nano /home/flaskwsgi/public_wsgi/flask.wsgi</p>
+            <p class="code">
+                import sys<br>
+                assert sys.version_info.major >= 3, "Python-versio liian vanha tiedostossa flask.wsgi"<br>
+                <br>
+                sys.path.insert(0, '/home/flaskwsgi/public_wsgi/')<br>
+                from hello import app as application
+            </p>
+            <p>Testataan jälleen kerran mitä tapahtuu.</p>
+            <p class="code">
+                $ curl localhost<br>
+                $ tail -1 /var/log/apache2/error.log
+            </p>
+            <a href="../img/h5/h5img5.jpg"><img src="../img/h5/h5img5.jpg"></a><br>
+            <p>Nyt saadaan virhe 500 "internal server error", joka johtuu puuttuvasta moduulista 'hello'. Kopioidaan aiemmassa harjoituksessa luotu hello.py xubuntun hakemistosta uuden projektin hakemistoon.</p>
+            <p class="code">$ cp helloworld/hello.py /home/flaskwsgi/public_wsgi/</p>
+            <p>Muokataan tiedostosta kohta "app.run(debug=True)" pois turvallisuussyistä.</p>
+            <p class="code">$ nano /home/flaskwsgi/public_wsgi/hello.py</p>
+            <p class="code">   
+                from flask import Flask<br>
+                app = Flask(__name__)<br>
+                <br>
+                @app.route("/")<br>
+                def hello():<br>
+                &nbsp;&nbsp;&nbsp;return "Hello, production Flask!\n"
+            </p>
+            <h4>Lopputulos</h4>
+            <p>Tarkastetaan lopputulos konsolilla ja Firefoxilla.</p>
+            <p class="code">curl localhost</p>
+            <a href="../img/h5/h5img6.jpg"><img src="../img/h5/h5img6.jpg"></a><br>
+        </div>
+        <div class="blueBox">
+            <h3 id="h5c">Flask-muotit</h3>
+            <p>Luodaan templates-kansio projektin hakemistoon.</p>
+            <p class="code">
+                $ cd /home/flaskwsgi/public_wsgi<br>
+                $ mkdir templates
+            </p>
+            <p>Muokataan hello.py tiedostoa. Muutokset keltaisella.</p>
+            <p class="code">$ nano hello.py</p>
+            <p class="code">
+                <span style="color:yellow;">#!/usr/bin/python3<br>
+                    "Return HTML templated page"<br></span>
+                <br>
+                from flask import Flask<span style="color:yellow;">, render_template<br></span>
+                app = Flask(__name__)<br>
+                <br>
+                @app.route("/")<br>
+                <span style="color:yellow;">def templated():<br>
+                    &nbsp;&nbsp;&nbsp;return render_template("base.html", greeting="Hello Templates!")</span>
+            </p>
+            <p>Luodaan muotti templates-kansioon</p>
+            <p class="code">$ nano templates/base.html</p>
+            <p class="code">
+                &lt;!DOCTYPE html&gt;<br>
+                &lt;html&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;head&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Hello Templates&lt;/title&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta charset="utf-8"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;/head&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;body&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;{{ greeting }}&lt;/h1&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Template toimii<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/p&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;/body&gt;<br>
+                &lt;/html&gt;
+            </p>
+            <p>Otetaan uusi versio käyttöön ja kokeillaan</p>
+            <p class="code">$ touch flask.wsgi</p>
+            <a href="../img/h5/h5img7.jpg"><img src="../img/h5/h5img7.jpg"></a><br>
+        </div>
+        <div class="blueBox">
+            <h3 id="h5d">Tietoja käyttäjästä</h3>
+            <p>Muokataan tiedostoa hello.py. Tuodaan request-metodi ja lisätään muuttujat IP-osoitteelle ja selaintiedoille. Muutokset keltaisella.</p>
+            <p class="code">nano hello.py</p>
+            <p class="code">
+                #!/usr/bin/python3<br>
+                "Return HTML templated page"<br>
+                <br>
+                from flask import Flask, render_template, <span style="color:yellow;">request</span><br>
+                app = Flask(__name__)<br>
+                <br>
+                @app.route("/")<br>
+                def templated():<br>
+                &nbsp;&nbsp;&nbsp;return render_template("base.html",<br>&nbsp;&nbsp;&nbsp;greeting="Hello Templates!"<span style="color:yellow;">,<br>&nbsp;&nbsp;&nbsp;IP=request.remote_addr,<br>&nbsp;&nbsp;&nbsp;userAgent=request.user_agent.string</span>)
+            </p>
+            <p>Muokataan base.html -muottia vastaanottamaan muuttujien arvot. Muutokset keltaisella.</p>
+            <p class="code">nano templates/base.html</p>
+            <p class="code">
+                &lt;!DOCTYPE html&gt;<br>
+                &lt;html&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;head&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Hello Templates&lt;/title&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta charset="utf-8"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;/head&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;body&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;{{ greeting }}&lt;/h1&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Template toimii<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/p&gt;<br>
+                <span style="color:yellow;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;IP-osoitteesi:&lt;br&gt;{{IP}}&lt;/p&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;Selaimesi:&lt;br&gt;{{userAgent}}&lt;/p&gt;<br></span>
+                &nbsp;&nbsp;&nbsp;&lt;/body&gt;<br>
+                &lt;/html&gt;
+            </p>
+            <p>Otetaan uusi versio käyttöön ja kokeillaan</p>
+            <p class="code">$ touch flask.wsgi</p>
+            <a href="../img/h5/h5img8.jpg"><img src="../img/h5/h5img8.jpg"></a><br>
+        </div>
+        <div class="blueBox">
+            <h3>Lähteet</h3>
+            <p>
+                <a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h4">http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h4</a><br>
+                <a href="http://terokarvinen.com/2020/hello-flask-python-web-app/">http://terokarvinen.com/2020/hello-flask-python-web-app/</a><br>
+                <a href="http://terokarvinen.com/2020/deploy-python-flask-to-production/">http://terokarvinen.com/2020/deploy-python-flask-to-production/</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

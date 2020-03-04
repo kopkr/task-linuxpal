@@ -13,25 +13,22 @@
     <div class="navBar">
         <ul>
             <li><a href="h1.html"><b>Harjoitus 1</b><br>Livetikku ja Linuxin testaus</a></li>
-            <li><a class="active" href="h2.html"><b>Harjoitus 2</b><br>Lokimuutoksia, SSH-demoni ja apt-get</a></li>
+            <li><a class="active" href="h2.html"><b>Harjoitus 2</b><br>Lokimuutoksia ja apt-get</a></li>
             <li><a href="h3.html"><b>Harjoitus 3</b><br>Apache2 asennus, testailu ja lokin tarkastelu</a></li>
             <li><a href="h4.html"><b>Harjoitus 4</b><br>Virtuaalipalvelin ja nimipalvelu</a></li>
-            <li><p>Harjoitus 5</p></li>
+            <li><a href="h5.html"><b>Harjoitus 5</b><br>Python Flask</a></li>
             <li><p>Harjoitus 6</p></li>
             <li><p>Harjoitus 7</p></li>
         </ul>
     </div>
     <div class="content">
-        <h2>Lokimuutoksia, SSH-demoni ja apt-get</h2>
+        <h2>Lokimuutoksia ja apt-get</h2>
         <span>04.02.-20, Kristian Koponen</span>
         <div class="blueBox">
             <h3>Tehtävänanto<br><span class="small"><a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h2">Linux-palvelimet h2</a></span></h3>
             <ul>
                 <li>
                     Aiheuta lokiin kaksi eri tapahtumaa: yksi esimerkki onnistuneesta ja yksi esimerkki epäonnistuneesta tai kielletystä toimenpiteestä. Analysoi rivit yksityiskohtaisesti.
-                </li>
-                <li>
-                    Vapaaehtoinen kohta, ei ole opetettu vielä: Asenna SSH-demoni. Kokeile omalla ssh-palvelimellasi jotain seuraavista: ssh-copy-id, sshfs, scp tai git.
                 </li>
                 <li>
                     Tee unelmien apt-get -komento: yksi komentorivi, joka asentaa suosikkiohjelmasi.
@@ -74,10 +71,6 @@
             <p>Seuraavaksi yritin luoda live-Linuxin oletuskäyttäjälle ”xubuntu” uutta salasanaa, jotta voin aiheuttaa tämän avulla virheen lokissa. Virhe tulikin jo salasanan luonnissa. Syötin komentoriville <span class="command">passwd xubuntu</span>. Tämä toiminto ei onnistunut. Katsoin virheilmoituksen auth.logista komennolla <span class="command">tail /var/log/auth.log</span>. Virhe johtui autentikointi-rajoitteesta. Tämä virhe korjaantui tietenkin laittamalla komennon eteen <span class="command">sudo</span>.</p>
             <a href="../img/passwd.jpg"><img src="../img/passwd.jpg"></a><br>
             <span>(Klikkaa kuva suuremmaksi)</span>
-        </div>
-        <div class="blueBox">
-            <h3>SSH-demoni</h3>
-            <p>(Työn alla)</p>
         </div>
         <div class="blueBox">
             <h3>Unelmien apt-get -komento</h3>
