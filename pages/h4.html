@@ -17,13 +17,13 @@
             <li><a href="h3.html"><b>Harjoitus 3</b><br>Apache2 asennus, testailu ja lokin tarkastelu</a></li>
             <li><a class="active" href="h4.html"><b>Harjoitus 4</b><br>Virtuaalipalvelin ja nimipalvelu</a></li>
             <li><a href="h5.html"><b>Harjoitus 5</b><br>Python Flask</a></li>
-            <li><p>Harjoitus 6</p></li>
+            <li><a href="h6.html"><b>Harjoitus 6</b><br>_</a></li>
             <li><p>Harjoitus 7</p></li>
         </ul>
     </div>
     <div class="content">
         <h2>Virtuaalipalvelin ja nimipalvelu</h2>
-        <span>22.02.-20, Kristian Koponen</span>
+        <span>22.02. - 25.02.2020, Kristian Koponen</span>
         <div class="blueBox">
             <h3>Tehtävänanto<br><span class="small"><a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h4">Linux-palvelimet h4</a></span></h3>
             <ul>
@@ -94,31 +94,39 @@
         </div>
         <div class="blueBox">
             <h3 id="h4b">Palvelimelle tarvittavat alkutoimet</h3>
-            <p>
-                Aloitetaan avaamalla Linux-päätelaite ja päivittämällä komennolla <span class="command">sudo apt-get update && sudo apt-get upgrade</span>. Asennetaan SSH-demoni komennolla <span class="command">sudo apt-get install ssh -y</span>.
+            <p>Aloitetaan avaamalla Linux-päätelaite ja päivittämällä komennolla </p>
+            <p class="code">$ sudo apt-get update && sudo apt-get upgrade</p>
+            <p>Asennetaan SSH-demoni komennolla</p>
+            <p class="code">$ sudo apt-get install ssh -y</p>
+            <p>Kirjaudutaan palvelimelle SSH-yhteydellä palvelimen IP-osoitteeseen sen root-käyttäjällä. IP-osoitteen saa DigitalOceanin dropletin tiedoista ja root-käyttäjän salasana on lähetetty sähköpostiin.</p>
+            <p class="code">$ ssh root@10.0.0.1</p>
+            <p>Tulee ilmoitus että kyseisen IP-osoitteen autentikointi ei onnistu ja annetaan ECDSA tunniste. Vaihtoehtoina jatkaa tai peruuttaa yhteys. Jatketaan kirjoittamalla "yes".</p>
+            <p>Annetaan DigitalOceanin lähettämä salasana, jolla kirjaudumme root-käyttäjälle. Järjestelmä pyytää vaihtamaan salasanan uuteen. Kun olemme tämän tehneet, olemme sisällä uudella palvelimellamme root-käyttäjänä.
             </p>
-            <p>
-                Kirjaudutaan palvelimelle SSH-yhteydellä palvelimen IP-osoitteeseen sen root-käyttäjällä. IP-osoitteen saa DigitalOceanin dropletin tiedoista ja root-käyttäjän salasana on lähetetty sähköpostiin. <span class="command">ssh root@10.0.0.1</span>. (Kirjoitin tässä vaiheessa IP-osoitteen väärin ja SSH-yhteys ei onnistunut. Korjasin ongelman kirjoittamalla IP-osoitteen oikein.) Tulee ilmoitus että kyseisen IP-osoitteen autentikointi ei onnistu ja annetaan ECDSA tunniste. Vaihtoehtoina jatkaa tai peruuttaa yhteys. Jatketaan kirjoittamalla <span class="command">yes</span>. Annetaan DigitalOceanin lähettämä salasana, jolla kirjaudumme root-käyttäjälle. Järjestelmä pyytää vaihtamaan salasanan uuteen. Kun olemme tämän tehneet, olemme sisällä uudella palvelimellamme root-käyttäjänä.
-            </p>
-            <p>
-                Ensimmäisenä luomme reiän SSH-yhteydelle (portti 22) palomuuriin, jotta voimme jatkaa käyttöä sen käynnistämisen jälkeen. Komento <span class="command">sudo ufw allow 22/tcp</span>. Käynnistetään palomuuri komennolla <span class="command">sudo ufw enable</span>. Tulee vielä varoitus, että palomuurin käynnistäminen saattaa häiritä nykyistä SSH-yhteyttä. Jatketaan.
-            </p>
+            <p>Ensimmäisenä luomme reiän SSH-yhteydelle (oletuksena portti 22) palomuuriin, jotta voimme jatkaa käyttöä sen käynnistämisen jälkeen. Komento</p>
+            <p class="code">$ sudo ufw allow 22/tcp</p>
+            <p>Käynnistetään palomuuri komennolla</p>
+            <p class="code">$ sudo ufw enable</p><p>
+            Tulee vielä varoitus, että palomuurin käynnistäminen saattaa häiritä nykyistä SSH-yhteyttä. Jatketaan.</p>
             <a href="../img/h4/h4img11.jpg"><img src="../img/h4/h4img11.jpg"></a><br>
-            <p>
-                Luodaan uusi käyttäjä, jotta voimme lukita root-käyttäjän. Komento <span class="command">sudo adduser username</span>. Järjestelmä pyytää asettamaan käyttäjälle salasanan. Käytetään samaa, jota käytimme root-tunnukseen. Seuraavaksi tulee käyttäjälle tietojen asetus. Nimi, huonenumero, puhelinnumero ja muut tiedot. Annetaan käyttäjälle myös pääkäyttäjän, sekä adminin oikeudet.
-            </p>
+            <p>Luodaan uusi käyttäjä, jotta voimme lukita root-käyttäjän.</p>
+            <p class="code">$ sudo adduser username</p>
+            <p>Järjestelmä pyytää asettamaan käyttäjälle salasanan. Käytetään samaa, jota käytimme root-tunnukseen. Seuraavaksi tulee käyttäjälle tietojen asetus. Nimi, huonenumero, puhelinnumero ja muut tiedot. Annetaan käyttäjälle myös pääkäyttäjän, sekä adminin oikeudet.</p>
             <a href="../img/h4/h4img12.jpg"><img src="../img/h4/h4img12.jpg"></a><br>
-            <p>
-                Testataan että käyttäjä toimii. Avataan uusi terminaali ja kirjaudutaan käyttäjällä palvelimelle. Yhteys toimii. Katsotaan vielä käyttäjän ryhmät komennolla <span class="command">groups</span>. Kaikki hyvin.
-            </p>
+            <p>Testataan että käyttäjä toimii. Avataan uusi terminaali ja kirjaudutaan käyttäjällä palvelimelle. Yhteys toimii. Katsotaan vielä käyttäjän ryhmät.</p>
+            <p class="code">$ groups</p>
+            <p>Kaikki hyvin.</p>
             <a href="../img/h4/h4img13.jpg"><img src="../img/h4/h4img13.jpg"></a><br>
-            <p>
-                Nyt voidaan lukita root-käyttäjä, ettei sitä voida väärinkäyttää. Ensin lukitaan sen salasana komennolla <span class="command">sudo usermod --lock root</span>. Lukitaan root-käyttäjän SSH-kirjautuminen muokkaamalla /etc/ssh/sshd_config -tiedoston PermitRootLogin kohtaa kirjoittamalla sen perään "no". Komento <span class="command">sudoedit /etc/ssh/sshd_config</span>. Käynnistetään SSH uudelleen.
-            </p>
+            <p>Nyt lukitaan root-käyttäjä, ettei sitä voida väärinkäyttää. Ensin lukitaan sen salasana.</p>
+            <p class="code">$ sudo usermod --lock root</p>
+            <p>Lukitaan root-käyttäjän SSH-kirjautuminen muokkaamalla /etc/ssh/sshd_config -tiedostoa.</p>
+            <p class="code">$ sudoedit /etc/ssh/sshd_config</p>
+            <p class="code">...<br>PermitRootLogin no<br>...</p>
+            <p>Käynnistetään SSH uudelleen.</p>
             <a href="../img/h4/h4img14.jpg"><img src="../img/h4/h4img14.jpg"></a><br>
-            <p>
-                Päivitetään järjestelmä komennolla <span class="command">sudo apt-get update && sudo apt-get upgrade -y</span>. Olemme nyt valmiita palvelimen alkutoimien kanssa.
-            </p>
+            <p>Päivitetään järjestelmä komennolla</p>
+            <p class="code">$ sudo apt-get update && sudo apt-get upgrade -y</p>
+            <p>Palvelimen alkutoimet ovat nyt valmiit.</p>
         </div>
         <div class="blueBox">
             <h3 id="h4c">DNS-nimi</h3>
@@ -126,40 +134,97 @@
             <a href="../img/h4/h4img15.jpg"><img src="../img/h4/h4img15.jpg"></a><br>
             <p>Kun nimi on tilattu, mennään omalle Dashboardille ja painetaan "Manage" kyseisen nimen kohdalta. Täällä osoitteen liittäminen on piilotettu Advanced DNS -välilehden taakse. Täytetään Host Records -kohtaan uudet A Recordit. Toiselle Host-kohtaan "@" ja toiselle muodon vuoksi tehty "www". Aliosoitteita voidaan luoda rajattomasti ilmaiseksi. A Record (A-tietue) tarkoittaa sitä, että nimellä voidaan osoittaa IP-osoitteeseen, joten lisätään palvelimen IP-osoitteen Value-kenttään ja hyväksytään.</p>
             <a href="../img/h4/h4img16.jpg"><img src="../img/h4/h4img16.jpg"></a><br>
-            <p>Annetaan hetki uudelle nimelle tulla näkyviin, ja sitten testataan päästäänkö nimellä IP-osoitteeseen. Mennään terminaaliin ja otetaan SSH-yhteys IP-osoitteen sijasta DNS-nimeen. <span class="command">ssh username@example.com</span>. Päästiin onnistuneesti kirjautumaan palvelimelle, joten voidaan päätellä, että uusi nimi on nyt käytössä.</p>
+            <p>Annetaan hetki uudelle nimelle tulla näkyviin, ja sitten testataan päästäänkö nimellä IP-osoitteeseen. Mennään terminaaliin ja otetaan SSH-yhteys IP-osoitteen sijasta DNS-nimeen.</p>
+            <p class="code">$ ssh username@example.com</p>
+            <p>Päästiin onnistuneesti kirjautumaan palvelimelle, joten voidaan päätellä, että uusi nimi on nyt käytöstä.</p>
             <a href="../img/h4/h4img17.jpg"><img src="../img/h4/h4img17.jpg"></a><br>
         </div>
         <div class="blueBox">
-            <h3 id="h4d">TLS-salakirjoitus</h3>
-            <p>Aloitetaan asentamalla palvelimelle apache2 ja saamalla testisivu näkyviin verkon yli. <span class="command">sudo apt-get install apache2</span>. Tehdään reikä HTTP-pyynnöille palomuuriin komennolla <span class="command">sudo ufw allow 80/tc</span>. Käydään selaimella aiemmin asetetussa osoitteessa katsomassa, että Apachen testisivu näkyy. Näkyy, joten Apache toimii. Voidaan korvata myös testisivun sisältö komennolla <span class="command">echo "Hello world" | sudo tee /var/www/html/index.html</span></p>
+            <h3 id="h4d">TLS-salakirjoitus<br><span class="small">Muokattu 08.03.2020 (Korjaus)</span></h3>
+            <p>Aloitetaan asentamalla palvelimelle apache2 ja saamalla testisivu näkyviin verkon yli.</p>
+            <p class="code">$ sudo apt-get install apache2</p>
+            <p>Tehdään reikä HTTP-pyynnöille palomuuriin komennolla</p>
+            <p class="code">$ sudo ufw allow 80/tc</p>
+            <p>Käydään selaimella aiemmin asetetussa osoitteessa katsomassa, että Apachen testisivu näkyy. Näkyy, joten Apache toimii. Voidaan korvata myös testisivun sisältö komennolla</p>
+            <p class="code">$ echo "Hello world" | sudo tee /var/www/html/index.html</p>
             <p>Luodaan VirtualHost domainille kuten <a href="h3.html#h3h">harjoitus 3:ssa</a> tehtiin.</p>
             <p>TLS-salakirjoitusta varten käytetään <a href="https://letsencrypt.org/">Let's Encryptin</a> ilmaista sertifiointia. Let's Encrypt vaatii sertifikaatin uusimisen 90 vuorokauden välein, joten käytetään <a href="https://certbot.eff.org/">Certbotia</a> tämän automatisoimiseksi.</p>
             <p>Certbotin sivuilta saa palvelimen perusteella suorat <a href="https://certbot.eff.org/lets-encrypt/ubuntubionic-apache">ohjeet</a> Certbotin asentamiselle. Seuraavilla komennoilla saadaan Certbot PPA repositoryyn:</p>
-            <ul>
-                <li><span class="command">sudo apt-get update</span></li>
-                <li><span class="command">sudo apt-get install software-properties-common</span></li>
-                <li><span class="command">sudo add-apt-repository universe</span></li>
-                <li><span class="command">sudo add-apt-repository ppa:certbot/certbot</span></li>
-                <li><span class="command">sudo apt-get update</span></li>
-            </ul>
-            <p>Asennetaan Certbot komennolla <span class="command">sudo apt-get install certbot python-certbot-apache</span>. Sitten haetaan sertifikaatti ja asennetaan se Apache-palvelimen konfiguraatioon komennolla <span class="command">sudo certbot --apache</span>.</p>
+            <p class="code">
+                $ sudo apt-get update<br>
+                $ sudo apt-get install software-properties-common<br>
+                $ sudo add-apt-repository universe<br>
+                $ sudo add-apt-repository ppa:certbot/certbot<br>
+                $ sudo apt-get update
+            </p>
+            <p>Asennetaan Certbot.</p>
+            <p class="code">$ sudo apt-get install certbot python-certbot-apache</p>
+            <p>Sitten haetaan sertifikaatti ja asennetaan se Apache-palvelimen konfiguraatioon.</p>
+            <p class="code">$ sudo certbot --apache</p>
             <p>Certbot pyytää sähköpostiosoitetta uusimis- ja turvallisuustiedoituksia varten, lukemaan käyttöehdot ja hyväksymään ne sekä lupaa jakaa sähköpostiosoitteen Electronic Frontier Foundationin muita tiedotteita varten. Certbot käy läpi Apachen konfiguraatio-tiedostot ja kysyy vielä mille nimille HTTPS halutaan aktivoida. Tässä voidaan valita tietyt nimet, tai jättää kohta tyhjäksi jolloin se aktivoidaan kaikille havaituille sivuille. Vielä täytyy valita halutaanko ohjata HTTP-pyynnöt HTTPS:ää, joka poistaa HTTP-pyynnöt käytöstä. Valitaan tähän kyllä.</p>
-            <p>Saadaan vihdoin ilmoitus, että sertifikaatti on käytössä. Testataan automattista uusimista komennolla <span class="command">sudo certbot renew --dry-run</span>. Komentoriville tulostuu uusimisen kuivaharjoittelua ja onnistumisilmoitus. Voidaan nyt vielä käydä testaamassa, että meillä on HTTPS-yhteys. Nyt selaimella osoitteeseen navigoidessa tulee "Connection timed out". Spekuloin virheen johtuvan portista ja palomuuriasetuksista. Otin HTTP:n pois käytöstä, joten nyt yhteyttä yritetään luoda HTTPS:n kautta ja HTTPS käyttää oletusarvoisesti porttia 443. Luodaan siis reikä palomuuriin portille 443 komennolla <span class="command">sudo ufw allow 443/tcp</span>. Kokeillaan uudelleen ja sivu tulee näkyviin ja yhteys näkyy olevan verifioitu.</p>
+            <p>Saadaan vihdoin ilmoitus, että sertifikaatti on käytössä. Testataan automattista uusimista komennolla</p>
+            <p class="code">$ sudo certbot renew --dry-run</p>
+            <p>Komentoriville tulostuu uusimisen kuivaharjoittelua ja onnistumisilmoitus. Voidaan nyt vielä käydä testaamassa, että meillä on HTTPS-yhteys. Nyt selaimella osoitteeseen navigoidessa tulee "Connection timed out". Spekuloin virheen johtuvan portista ja palomuuriasetuksista. Otin HTTP:n pois käytöstä, joten nyt yhteyttä yritetään luoda HTTPS:n kautta ja HTTPS käyttää oletusarvoisesti porttia 443. Luodaan siis reikä palomuuriin portille 443 komennolla</p>
+            <p class="code">$ sudo ufw allow 443/tcp</p>
+            <p>Kokeillaan uudelleen ja sivu tulee näkyviin ja yhteys näkyy olevan verifioitu.</p>
             <a href="../img/h4/h4img18.jpg"><img src="../img/h4/h4img18.jpg"></a><br>
-            <p>Otetaan lopuksi Apachen oletussivu pois käytöstä komennolla <span class="command">sudo a2dissite 000-default.com.conf</span> ja vielä sertifioinnin yhteydessä luotu <span class="command">sudo a2dissite 000-default.com-le-ssl.conf</span>. Käynnistetään Apache uudestaan komennolla <span class="command">sudo systemctl reload apache2</span>.</p>
+            <p>Otetaan lopuksi Apachen oletussivu pois käytöstä komennolla</p>
+            <p class="code">$ sudo a2dissite 000-default.com.conf</p>
+            <p>ja vielä sertifioinnin yhteydessä luotu SSL-konfiguraatio oletussivulle
+            </p>
+            <p class="code">$ sudo a2dissite 000-default.com-le-ssl.conf</p>
+            <p>Käynnistetään Apache uudestaan komennolla</p>
+            <p class="code">$ sudo systemctl reload apache2</p>
         </div>
         <div class="blueBox">
-            <h3 id="h4e">Murtautumisyrityksien tutkimista</h3>
-            <p>Käydään tutkimassa autentikointi-lokia komennolla <span class="command">tail -n 30 /var/log/auth.log</span>. Löytyy useita eri yrityksiä kirjautua root-käyttäjänä sisään. On tullut autentikointi-virhe väärien salasanojen vuoksi. Todennäköisesti yritetään päästä kirjautumaan sisään sanakirjahyökkäyksellä.
-            </p>
+            <h3 id="h4e">Murtautumisyrityksien tutkimista<br><span class="small">Muokattu 08.03.2020 (Korjaus)</span></h3>
+            <p>Käydään tutkimassa autentikointi-lokia komennolla</p>
+            <p class="code">$ tail -n 30 /var/log/auth.log</p>
+            <p>Löytyy useita eri yrityksiä kirjautua root-käyttäjänä sisään. On tullut autentikointi-virhe väärien salasanojen vuoksi. Todennäköisesti yritetään päästä kirjautumaan sisään sanakirjahyökkäyksellä.</p>
             <a href="../img/h4/h4img19.jpg"><img src="../img/h4/h4img19.jpg"></a><br>
-            <p>Kirjautumisyrityksessä näkyy IP-osoite, josta yritys on tullut. Katsotaan komennolla <span class="command">whois (IP-osoite)</span> mistä tämä on lähtöisin. Näyttää tulleen kiinalaisen operaattorin hallinoimasta osoitteesta.</p>
+            <p>Kirjautumisyrityksessä näkyy IP-osoite, josta yritys on tullut. Katsotaan mistä tämä on lähtöisin.
+            <p class="code">$ whois (IP-osoite)</p>
+            <p>Näyttää tulleen kiinalaisen operaattorin hallinoimasta osoitteesta.</p>
             <a href="../img/h4/h4img20.jpg"><img src="../img/h4/h4img20.jpg"></a><br>
             <p>Vaikka root-käyttäjä on palvelimella lukittu, halutaan kuitenkin estää jatkuva SSH-pommitus. Ideana on estää yhteydet useasti epäonnistuneesta kirjautumisyrityksestä.</p>
-            <p>Asennetaan fail2ban komennolla <span class="command">sudo apt-get install fail2ban</span>. Tarkastetaan että fail2ban demonia on käynnissä komennolla <span class="command">sudo systemctl status fail2ban</span>. Saadaan konsoliin näkyviin, että fail2ban on aktiivinen ja elinikä. Fail2ban pitää kuitenkin vielä konfiguroida. Vaihdetaan fail2banin hakemistoon <span class="command">cd /etc/fail2ban</span>. Fail2ban lukee ensin .conf tiedostot ja sen jälkeen .local tiedostot, eli muutokset on hyvä tehdä .local tiedostoon. Kopioidaan jail.conf tiedosto komennolla <span class="command">sudo cp jail.conf jail.local</span>.</p>
+            <p>Asennetaan fail2ban</p>
+            <p class="code">$ sudo apt-get install fail2ban</p>
+            <p>Tarkastetaan että fail2ban demonia on käynnissä</p>
+            <p class="code">$ sudo systemctl status fail2ban</p>
+            <p>Saadaan konsoliin näkyviin, että fail2ban on aktiivinen ja elinikä. Fail2ban pitää kuitenkin vielä konfiguroida. Vaihdetaan fail2banin hakemistoon</p>
+            <p class="code">$ cd /etc/fail2ban</p>
+            <p>Fail2ban lukee ensin .conf tiedostot ja sen jälkeen .local tiedostot, eli muutokset on hyvä tehdä .local tiedostoon. Kopioidaan jail.conf tiedosto.</p>
+            <p class="code">$ sudo cp jail.conf jail.local</p>
             <p>Tässä tiedostossa muutetaan "bantime", "findtime" ja "maxretry" kohtia. Laitetaan eston pituudeksi testimielessä 3 minuuttia. Eli 180 kohdan "bantime" perään. Jätetään "findtime" ja "bantime" vielä oletusarvoihin. Eli jos tulee 5 epäonnistunutta kirjautumisyritystä 10 minuutin sisällä, tulee 3 minuutin esto. Tällä on hyvä testata. Voidaan myöhemmin muuttaa näitä arvoja sopivimmiksi.</p>
-            <p>Mennään tiedostossa alaspäin kohtaan "# JAILS". Lisätään kohdan "[sshd]" perään "enable = true" ja muutetaan "port" kohtaan käytetty SSH-portti (oletusarvoisesti 22). Tallennetaan tiedosto ja käynnistetään Fail2ban uudelleen komennolla <span class="command">sudo systemctl restart fail2ban</span>.</p>
-            <p>Jäädään lukemaan fail2ban lokia komennolla <span class="command">tail -f /var/log/fail2ban.log</span>. Tarkoituksena oli koittaa kirjautua itse väärillä tunnuksilla, mutta botit ehtivätkin ensin ja lokiin tallentui useita yrityksiä. Jokainen osoite estettiin viiden yrityksen jälkeen kolmeksi minuutiksi.</p>
+            <p class="code">
+                # "bantime" is the number of seconds that a host is banned.<br>
+                bantime  = 180<br>
+                <br>
+                # A host is banned if it has generated "maxretry" during the last "findtime"<br>
+                # seconds.<br>
+                findtime  = 10m<br>
+                <br>
+                # "maxretry" is the number of failures before a host get banned.<br>
+                maxretry = 5<br>
+            </p>
+            <p>Mennään tiedostossa alaspäin kohtaan "# JAILS". Lisätään kohdan "[sshd]" perään "enable = true" ja muutetaan "port" kohtaan käytetty SSH-portti (oletusarvoisesti 22).</p>
+            <p class="code">
+                [sshd]<br>
+                <br>
+                # To use more aggressive sshd modes set filter parameter "mode" in jail.local:<br>
+                # normal (default), ddos, extra or aggressive (combines all).<br>
+                # See "tests/files/logs/sshd" or "filter.d/sshd.conf" for usage example and details.<br>
+                #mode   = normal<br>
+                enable  = true<br>
+                port    = 22<br>
+                logpath = %(sshd_log)s<br>
+                backend = %(sshd_backend)s<br>
+            </p>
+            <p>Tallennetaan tiedosto ja käynnistetään Fail2ban uudelleen.</p>
+            <p class="code">$ sudo systemctl restart fail2ban</p>
+            <p>Jäädään lukemaan fail2ban lokia komennolla</p>
+            <p class="code">$ tail -f /var/log/fail2ban.log</p>
+            <p>Tarkoituksena oli koittaa kirjautua itse väärillä tunnuksilla, mutta botit ehtivätkin ensin ja lokiin tallentui useita yrityksiä. Jokainen osoite estettiin viiden yrityksen jälkeen kolmeksi minuutiksi.</p>
             <a href="../img/h4/h4img21.jpg"><img src="../img/h4/h4img21.jpg"></a><br>
             <p>Testasin vielä kuitenkin itse mitä tapahtuu, kun kirjautuu väärillä tunnuksilla, eri IP:stä ettei oma yhteys katkea. Yhteys ei yksinkertaisesti onnistu ollenkaan. Tästä testistä päättelin, että fail2ban toimii. Mennään muokkaamaan "bantime", "findtime" ja "maxretry" kohdat /etc/fail2ban/jail.local -tiedostosta sopiviksi ja jätetään fail2ban hoitamaan tunkeilijat.</p>
         </div>  

@@ -17,7 +17,7 @@
             <li><a href="h3.html"><b>Harjoitus 3</b><br>Apache2 asennus, testailu ja lokin tarkastelu</a></li>
             <li><a href="h4.html"><b>Harjoitus 4</b><br>Virtuaalipalvelin ja nimipalvelu</a></li>
             <li><a class="active" href="h5.html"><b>Harjoitus 5</b><br>Python Flask</a></li>
-            <li><p>Harjoitus 6</p></li>
+            <li><a href="h6.html"><b>Harjoitus 6</b><br>_</a></li>
             <li><p>Harjoitus 7</p></li>
         </ul>
     </div>
@@ -87,7 +87,7 @@
             <a href="../img/h5/h5img1.jpg"><img src="../img/h5/h5img1.jpg"></a><br>
         </div>
         <div class="blueBox">
-            <h3 id="h5b">Tuotanto-Flask</h3>
+            <h3 id="h5b">Tuotanto-Flask<br><span class="small">Muokattu 08.03.2020 (Korjaus)</span></h3>
             <h4>Alkutoimet</h4>
             <p>Asennetaan apache.</p>
             <p class="code">$ sudo apt-get update && sudo apt-get -y install apache2</p>
@@ -137,7 +137,7 @@
             <p class="code">$ apache2ctl configtest<br>
             Syntax OK</p>
             <p>Käynnistetään taas apache uudelleen.</p>
-            <p class="code">sudo systemctl restart apache2</p>
+            <p class="code">$ sudo systemctl restart apache2</p>
             <br>
             <h4>Hakemiston ja tiedostojen luonti</h4>
             <p>Testataan tässä välissä mitä on saatu aikaan.</p>
@@ -163,7 +163,7 @@
             </p>
             <a href="../img/h5/h5img4.jpg"><img src="../img/h5/h5img4.jpg"></a><br>
             <p>Tällä kertaa tulee 404-virhe, joka taas johtuu puuttuvasta WSGI-tiedostosta. Luodaan uusi tekstitiedosto, joka voidaan nyt tehdä ilman sudoa</p>
-            <p class="code">nano /home/flaskwsgi/public_wsgi/flask.wsgi</p>
+            <p class="code">$ nano /home/flaskwsgi/public_wsgi/flask.wsgi</p>
             <p class="code">
                 import sys<br>
                 assert sys.version_info.major >= 3, "Python-versio liian vanha tiedostossa flask.wsgi"<br>
@@ -179,7 +179,7 @@
             <a href="../img/h5/h5img5.jpg"><img src="../img/h5/h5img5.jpg"></a><br>
             <p>Nyt saadaan virhe 500 "internal server error", joka johtuu puuttuvasta moduulista 'hello'. Kopioidaan aiemmassa harjoituksessa luotu hello.py xubuntun hakemistosta uuden projektin hakemistoon.</p>
             <p class="code">$ cp helloworld/hello.py /home/flaskwsgi/public_wsgi/</p>
-            <p>Muokataan tiedostosta kohta "app.run(debug=True)" pois turvallisuussyistä.</p>
+            <p>Muokataan tiedostosta kohta "app.run(debug=True)" pois. Tätä ei tuotantokelpoisessa tuotteessa tarvita, ja debug-toiminto on turvallisuusriski.</p>
             <p class="code">$ nano /home/flaskwsgi/public_wsgi/hello.py</p>
             <p class="code">   
                 from flask import Flask<br>
@@ -191,7 +191,7 @@
             </p>
             <h4>Lopputulos</h4>
             <p>Tarkastetaan lopputulos konsolilla ja Firefoxilla.</p>
-            <p class="code">curl localhost</p>
+            <p class="code">$ curl localhost</p>
             <a href="../img/h5/h5img6.jpg"><img src="../img/h5/h5img6.jpg"></a><br>
         </div>
         <div class="blueBox">
@@ -238,7 +238,7 @@
         <div class="blueBox">
             <h3 id="h5d">Tietoja käyttäjästä</h3>
             <p>Muokataan tiedostoa hello.py. Tuodaan request-metodi ja lisätään muuttujat IP-osoitteelle ja selaintiedoille. Muutokset keltaisella.</p>
-            <p class="code">nano hello.py</p>
+            <p class="code">$ nano hello.py</p>
             <p class="code">
                 #!/usr/bin/python3<br>
                 "Return HTML templated page"<br>
@@ -251,7 +251,7 @@
                 &nbsp;&nbsp;&nbsp;return render_template("base.html",<br>&nbsp;&nbsp;&nbsp;greeting="Hello Templates!"<span style="color:yellow;">,<br>&nbsp;&nbsp;&nbsp;IP=request.remote_addr,<br>&nbsp;&nbsp;&nbsp;userAgent=request.user_agent.string</span>)
             </p>
             <p>Muokataan base.html -muottia vastaanottamaan muuttujien arvot. Muutokset keltaisella.</p>
-            <p class="code">nano templates/base.html</p>
+            <p class="code">$ nano templates/base.html</p>
             <p class="code">
                 &lt;!DOCTYPE html&gt;<br>
                 &lt;html&gt;<br>
@@ -276,7 +276,7 @@
         <div class="blueBox">
             <h3>Lähteet</h3>
             <p>
-                <a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h4">http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h4</a><br>
+                <a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h4">http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h5</a><br>
                 <a href="http://terokarvinen.com/2020/hello-flask-python-web-app/">http://terokarvinen.com/2020/hello-flask-python-web-app/</a><br>
                 <a href="http://terokarvinen.com/2020/deploy-python-flask-to-production/">http://terokarvinen.com/2020/deploy-python-flask-to-production/</a>
             </p>
