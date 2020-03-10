@@ -17,7 +17,7 @@
             <li><a class="active" href="h3.html"><b>Harjoitus 3</b><br>Apache2 asennus, testailu ja lokin tarkastelu</a></li>
             <li><a href="h4.html"><b>Harjoitus 4</b><br>Virtuaalipalvelin ja nimipalvelu</a></li>
             <li><a href="h5.html"><b>Harjoitus 5</b><br>Python Flask</a></li>
-            <li><a href="h6.html"><b>Harjoitus 6</b><br>_</a></li>
+            <li><a href="h6.html"><b>Harjoitus 6</b><br>Tietokanta webissä</a></li>
             <li><p>Harjoitus 7</p></li>
         </ul>
     </div>
@@ -77,17 +77,17 @@
             <p>Testasin että sovellus toimii avaamalla selaimellani localhost -sivun. Testasin saman myös IP-osoitteellani, jonka hain komennolla
             <p class="code">ip addr</p>
             <p>Toimi hyvin kummallakin tavalla</p>
-            <a href="../img/h3/h3img1.jpg"><img src="../img/h3/h3img1.jpg"></a>
+            <a href="../img/h3/h3img1.jpg"><img src="../img/h3/h3img1.jpg" alt="h3img1"></a>
             <p>Seuraavaksi luon käyttäjälle kotisivun. Userdirin aktivoimiseksi käytän komentoa</p>
             <p class="code">sudo a2enmod userdir</p>
             <p>Konsoliin tulee viesti siitä, että muutoksia varten on käynnistettävä apache2 uudelleen, joka hoituu komennolla
             <p class="code">sudo systemctl restart apache2</p><br>
-            <a href="../img/h3/h3img2.jpg"><img src="../img/h3/h3img2.jpg"></a><br><br>
+            <a href="../img/h3/h3img2.jpg"><img src="../img/h3/h3img2.jpg" alt="h3img2"></a><br><br>
 
             <p>Luon oletuskäyttäjälle "xubuntu" public_html kansion komennolla</p>
             <p class="code">mkdir public_html</p>
             <p>Tämän kotihakemistoon. Luon yksinkertaisen index.html tiedoston kansioon. Navigoidaan selaimella osoitteeseen localhost/~xubuntu testataksemme, että käyttäjän sivu toimii.</p>
-            <a href="../img/h3/h3img3.jpg"><img src="../img/h3/h3img3.jpg"></a><br><br>
+            <a href="../img/h3/h3img3.jpg"><img src="../img/h3/h3img3.jpg" alt="h3img3"></a><br><br>
         </div>
         <div class="blueBox">
             <h3 id="h3h">Name Based Virtual Host ja DocumentRoot käyttäjän kotihakemistoon</h3>
@@ -101,7 +101,7 @@
             <p>ja luetaan konfiguraatiotiedostot uudelleen komennolla</p>
             <p class="code">sudo systemctl reload apache2</p>
             <br>
-            <a href="../img/h3/h3img4.jpg"><img src="../img/h3/h3img4.jpg"></a><br><br>
+            <a href="../img/h3/h3img4.jpg"><img src="../img/h3/h3img4.jpg" alt="h3img4"></a><br><br>
         </div>
         <div class="blueBox">
             <h3 id="h3b">Apachen lokit</h3>
@@ -109,7 +109,7 @@
             <p class="code">sudo nano /etc/hosts</p>
             <p>Ohjaan siellä selaimen oikeaan paikkaan lisäämällä sinne</p>
             <p class="code">127.0.0.1 xubtest.com</p><br>
-            <a href="../img/h3/h3img5.jpg"><img src="../img/h3/h3img5.jpg"></a><br>
+            <a href="../img/h3/h3img5.jpg"><img src="../img/h3/h3img5.jpg" alt="h3img5"></a><br>
             <p>Koitan nyt hakea selaimella osoitetta xubtest.com. Sieltä tulee virhe "403 Forbidden". Tarkastelen apachen virhelokia nähdäkseni viimeisimmän tapahtuman.</p>
             <p class="code">tail -n 1 /var/log/apache2/error.log</p>
             <p>Virheilmoitus ei ollut mitä kuvittelin. Odotin valitusta puuttuvasta hakemistosta, sillä konfiguraatio-tiedosto viittaa xubtest.com kansioon käyttäjän kotihakemistossa. Sainkin seuraavanlaisen virheilmoituksen.</p>
@@ -138,9 +138,9 @@
             <p>Palaan tässä vaiheessa eri nimien luontiin. Hakeudumme takaisin kansioon /etc/apache2/sites-available/ ja luomme uuden .conf -tiedoston <a href="h3.html#h3h">aiemmin</a> käytettyjen komentojen tavalla. Kopioin xubtest.com tiedoston ja luon sen pohjalta uuden komennolla</p>
             <p class="code">sudo cp xubtest.com.conf testagain.com.conf</p>
             <p>Vaihdan sieltä xubtest.com nimen testagain.comiin. Lataan apache2:n uudelleen komennolla <p class="code">sudo systemctl reload apache2</p><br>
-            <a href="../img/h3/h3img7.jpg"><img src="../img/h3/h3img7.jpg"></a><br>
+            <a href="../img/h3/h3img7.jpg"><img src="../img/h3/h3img7.jpg" alt="h3img7"></a><br>
             <p>Luodaan DocumentRootissa viitattu xubuntu/testagain.com -kansio ja sinne index.html tiedosto. Kirjoitetaan <a href="h3.html#h3b">aiemmin</a> käsiteltyyn /etc/hosts tiedostoon tarvittava testagain.com nimi samalla 127.0.0.1-osoitteella. Kokeillaan tätä selaimessa kirjoittamalla osoitekenttään testagain.com ja saadaan eri sivu näkyviin kuin xubtest.com -osoitteella tai localhostilla/IP:llä.</p>
-            <a href="../img/h3/h3img8.jpg"><img src="../img/h3/h3img8.jpg"></a><br><br>
+            <a href="../img/h3/h3img8.jpg"><img src="../img/h3/h3img8.jpg" alt="h3img8"></a><br><br>
         </div>
         <div class="blueBox">
             <h3>Lähteet</h3>

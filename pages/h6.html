@@ -7,7 +7,7 @@
 </head>
 <body>
     <header>
-        <h2>Linux-palvelimet <br>Harjoitus 5</h2>
+        <h2>Linux-palvelimet <br>Harjoitus 6</h2>
         <p>Kristian Koponen</p>
     </header>
     <div class="navBar">
@@ -17,18 +17,21 @@
             <li><a href="h3.html"><b>Harjoitus 3</b><br>Apache2 asennus, testailu ja lokin tarkastelu</a></li>
             <li><a href="h4.html"><b>Harjoitus 4</b><br>Virtuaalipalvelin ja nimipalvelu</a></li>
             <li><a href="h5.html"><b>Harjoitus 5</b><br>Python Flask</a></li>
-            <li><a class="active" href="h6.html"><b>Harjoitus 6</b><br>_</a></li>
+            <li><a class="active" href="h6.html"><b>Harjoitus 6</b><br>Tietokanta webissä</a></li>
             <li><p>Harjoitus 7</p></li>
         </ul>
     </div>
     <div class="content">
-        <h2>Harjoitus 6</h2>
-        <span>--.--.----, Kristian Koponen</span>
+        <h2>Tietokanta webissä</h2>
+        <span>10.03.2020, Kristian Koponen</span>
         <div class="blueBox">
             <h3>Tehtävänanto<br><span class="small"><a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h6">Linux-palvelimet h6</a></span></h3>
             <ul>
                 <li>
-                    <a href="h6.html#h6a">Tehtävä</a>
+                    <a href="h6.html#h6a">Tietokanta wepissä. Tee oma yksinkertainen, tietokantaa käyttävä ohjelma. Ohjelmalla tulee olla jokin käyttötarkoitus.</a>
+                </li>
+                <li>
+                    <a href="h6.html#h6a">Laita tietokantaohjelmasi toimimaan mod_wsgi:n kanssa.</a>
                 </li>
             </ul>
         </div>
@@ -57,12 +60,177 @@
         </div>
 
         <div class="blueBox">
-            <h3 id="h6a">Tehtävä</h3>
+            <h3 id="h6a">Tietokanta wepissä (mod_wsgi)</h3>
+            <p style="font-style: italic">Tarkoitus oli todennäköisesti tehdä tämä tehtävä ensin testiympäristössä, mutta tein epähuomiossa suoraan mod_wsgi:n kanssa toimivaksi</p>
+            <h4>Tiedostojen luonti</h4>
+            <p>Aloitetaan laittamalla hello world -ohjelma pyörimään tuotantoympäristössä <a href="h5.html#h5b">edellisen harjoituksen</a> vaiheiden mukaisesti.</p>
+            <p>WSGI-tiedosto</p>
+            <p class="code">$ nano /home/hellowsgi/public_wsgi/hello.wsgi</p>
+            <p class="code">
+                import sys<br>
+                assert sys.version_info.major >= 3, "Python versio on vanha"<br>
+                <br>
+                sys.path.insert(0, '/home/hellowsgi/public_wsgi/')<br>
+                from h6app import app as application<br>
+            </p>
+            <p>Kirjoitetaan <a href="http://terokarvinen.com/2020/flask-automatic-forms">Flask Automatic Forms</a> -ohjelman pohjalta oma python3 ohjelma. Aluksi luodaan python-tiedosto. Esimerkki <a href="http://terokarvinen.com/2020/flask-automatic-forms/#autoformedpy">autoformed.py</a></p>
+            <p class="code">$ nano /home/hellowsgi/public_wsgi/h6app.py</p>
+            <p class="code">
+                #!/usr/bin/python3<br>
+                "RSVP autoform"<br>
+                <br>
+                from flask import Flask, render_template, flash, redirect<br>
+                from flask_sqlalchemy import SQLAlchemy<br>
+                from wtforms.ext.sqlalchemy.orm import model_form<br>
+                from flask_wtf import FlaskForm<br>
+                import wtforms<br>
+                <br>
+                app = Flask(__name__)<br>
+                db = SQLAlchemy(app)<br>
+                app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///autoformed.db"<br>
+                app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False<br>
+                app.config["SECRET_KEY"] = "eiph5xai6piequoo7aiH2oghiem9Ei"<br>
+                <br>
+                class Movie(db.Model):<br>
+                &nbsp;&nbsp;&nbsp;id = db.Column(db.Integer, primary_key=True)<br>
+                &nbsp;&nbsp;&nbsp;title = db.Column(db.String, nullable=False)<br>
+                &nbsp;&nbsp;&nbsp;year = db.Column(db.Integer, nullable=False)<br>
+                &nbsp;&nbsp;&nbsp;category = db.Column(db.String, nullable=False)<br>
+                <br>
+                field_args = { }<br>
+                MovieForm = model_form(model=Movie, base_class=FlaskForm, db_session=db.session, field_args=field_args)<br>
+                <br>
+                @app.before_first_request<br>
+                def beforeFirstRequest():<br>
+                &nbsp;&nbsp;&nbsp;db.create_all()<br>
+                <br>
+                @app.route("/", methods=["GET", "POST"])<br>
+                def index():<br>
+                &nbsp;&nbsp;&nbsp;form = MovieForm()<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;if form.validate_on_submit():<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;movie = Movie()<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;form.populate_obj(movie)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db.session.add(movie)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;db.session.commit()<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flash("Movie has been added.")<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return redirect("/")<br>
+                &nbsp;&nbsp;&nbsp;movies = db.session.query(Movie)<br>
+                &nbsp;&nbsp;&nbsp;return render_template("movies.html", form=form, movies=movies)<br>
+                <br>
+                #def main():<br>
+                #&nbsp;&nbsp;&nbsp;app.run(debug=True)<br>
+                <br>
+                if __name__ == "__main__":<br>
+                &nbsp;&nbsp;&nbsp;main()<br>
+            </p>
+            <p>Luodaan pohjamuotti. Esimerkki <a href="http://terokarvinen.com/2020/flask-automatic-forms/#templatesbasehtml---base-template">Base template</a></p>
+            <p class="code">$ nano /home/hellowsgi/public_wsgi/templates/base.html</p>
+            <p class="code">
+                &lt;!DOCTYPE html&gt;<br>
+                &lt;html lang=en&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;head&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;title&gt;Movies to watch&lt;/title&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;meta charset="utf-8"&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;/head&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;body&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% with messages = get_flashed_messages() %}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% if messages %}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;ul class=flashes&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% for message in messages %}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;li&gt;{{ message }}&lt;/li&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% endfor %}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/ul&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% endif %}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% endwith %}<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% block body %}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;h1&gt;Hello...&lt;/h1&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% endblock %}<br>
+                &nbsp;&nbsp;&nbsp;&lt;/body&gt;<br>
+                <br>
+                &lt;/html&gt;<br>
+            </p>
+            <p>Viimeiseksi luodaan muotti tietokannan läpikäymiselle. Esimerkki <a href="http://terokarvinen.com/2020/flask-automatic-forms/#templatesreplieshtml---form-and-list-template">Form and List template</a></p>
+            <p class="code">$ nano /home/hellowsgi/public_wsgi/templates/movies.html</p>
+            <p class="code">
+                {% extends "base.html" %}<br>
+                {% block body %}<br>
+                &lt;h1&gt;Movies&lt;/h1&gt;<br>
+                &lt;form method=post action="/"&gt;<br>
+                &nbsp;&nbsp;&nbsp;{{ form.csrf_token }}<br>
+                &nbsp;&nbsp;&nbsp;{% for field in form if not field.name in ["csrf_token"] %}<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;p&gt;{{ field.label }}: {{ field }} &lt;b&gt;{{ " ".join(field.errors) }}&lt;/b&gt;&lt;/p&gt;<br>
+                &nbsp;&nbsp;&nbsp;{% endfor %}<br>
+                &nbsp;&nbsp;&nbsp;&lt;input type="submit"&gt;<br>
+                &lt;/form&gt;<br>
+                <br>
+                &lt;h2&gt;Movies&lt;/h2&gt;<br>
+                {% for movie in movies %}<br>
+                &lt;p&gt;{{ movie.title }} ({{movie.year}}) - {{movie.category}}&lt;/p&gt;<br>
+                {% endfor %}<br>
+                <br>
+                {% endblock %}<br>
+            </p>
+            <p>Päivitetään ohjelman sisältö koskettamalla hello.wsgi tiedostoa</p>
+            <p class="code">$ touch /home/hellowsgi/public_wsgi/hello.wsgi</p>
+            <br>
+            <h4>Puuttuvien osien asennusta</h4>
+            <p>Katsotaan localhostista mitä tapahtuu.</p>
+            <p class="code">
+                $ curl localhost|grep "title"<br><br>
+                &lt;title&gt;500 Internal server Error&lt;/title&gt;
+            </p>
+            Tulee Internal Server Error. Katsotaan lokista mitä kävi.
+            <p class="code">
+                $ tail -1 /var/log/apache2/error.log<br><br>
+                [Tue Mar 10 15:58:57.097190 2020] [wsgi:error] [pid 8424:tid 140635730364160] [remote 127.0.0.1:46218] ModuleNotFoundError: No module named 'flask_sqlalchemy'
+            </p>
+            Ei ole SQL-alchemy -moduulia asennettuna. Etsitään se ja asennetaan.
+            <p class="code">
+                $ sudo apt-cache search "flask_sqlalchemy"| grep "sqlalchemy" | grep "python3"<br><br>
+                python3-flask-sqlalchemy - adds SQLAlchemy support to your Python 3 Flask application<br><br>
+                $ sudo apt-get install python3-flask-sqlalchemy -y
+            </p>
+            <p>Kokeillaan uudelleen.</p>
+            <p class="code">
+                $ curl localhost|grep "title"<br><br>
+                &lt;title&gt;500 Internal server Error&lt;/title&gt;<br><br>
+                $ tail -1 /var/log/apache2/error.log<br><br>
+                [Tue Mar 10 16:04:48.556641 2020] [wsgi:error] [pid 8424:tid 140635721971456] [remote 127.0.0.1:46232] ModuleNotFoundError: No module named 'wtforms'
+            </p>
+            <p>Seuraavaksi asennetaan WTForms.</p>
+            <p class="code">
+                $ sudo apt-cache search "python3"|grep "wtforms"<br><br>
+                python3-wtforms - flexible forms validation and rendering library for Python 3<br><br>
+                $ sudo apt-get install python3-wtforms -y
+            </p>
+            <p>Kokeillaan taas</p>
+            <p class="code">
+                $ curl localhost|grep "title"<br><br>
+                &lt;title&gt;500 Internal server Error&lt;/title&gt;<br><br>
+                $ tail -1 /var/log/apache2/error.log<br><br>
+                [Tue Mar 10 16:06:33.772297 2020] [wsgi:error] [pid 8424:tid 140635730364160] [remote 127.0.0.1:46236] ModuleNotFoundError: No module named 'flask_wtf'
+            </p>
+            <p>ja asennetaan puuttuva integraation osa.</p>
+            <p class="code">
+                $ sudo apt-cache search "python3"|grep "wtf"|grep "flask"<br><br>
+                python3-flaskext.wtf - Simple integration of Flask and WTForms (Python 3)<br><br>
+                $ sudo apt-get install python3-flaskext.wtf -y
+            </p>
+            <br>
+            <h4>Lopputulos</h4>
+            <a href="../img/h6/h6img2.jpg"><img src="../img/h6/h6img2.jpg" alt="hellowsgi hakemisto"></a><br>
+            <p>Tarkastellaan lopullista ohjelmaa localhost osoitteesta.</p>
+            <a href="../img/h6/h6img1.jpg"><img src="../img/h6/h6img1.jpg" alt="autoforms_lopputulos"></a><br>
+            <p>Tietokantaan voi nyt tallentaa tietoa lomakkeella. Ohjelma toimii. Validointi on yksinkertainen ja tarkastaa ainoastaan onko kenttään syötetty mitään.</p><br>
         </div>
         <div class="blueBox">
             <h3>Lähteet</h3>
             <p>
-                <a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h4">http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h6</a><br>
+                <a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h6">http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h6</a><br>
+                <a href="http://terokarvinen.com/2020/flask-automatic-forms/">http://terokarvinen.com/2020/flask-automatic-forms/</a><br>
+                <a href="https://flask.palletsprojects.com/en/1.1.x/patterns/wtforms/">https://flask.palletsprojects.com/en/1.1.x/patterns/wtforms/</a><br>
             </p>
         </div>
     </div>

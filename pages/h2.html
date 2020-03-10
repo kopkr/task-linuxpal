@@ -17,7 +17,7 @@
             <li><a href="h3.html"><b>Harjoitus 3</b><br>Apache2 asennus, testailu ja lokin tarkastelu</a></li>
             <li><a href="h4.html"><b>Harjoitus 4</b><br>Virtuaalipalvelin ja nimipalvelu</a></li>
             <li><a href="h5.html"><b>Harjoitus 5</b><br>Python Flask</a></li>
-            <li><a href="h6.html"><b>Harjoitus 6</b><br>_</a></li>
+            <li><a href="h6.html"><b>Harjoitus 6</b><br>Tietokanta webissä</a></li>
             <li><p>Harjoitus 7</p></li>
         </ul>
     </div>
@@ -69,14 +69,14 @@
             <p>Nähdäkseni viimeiset 10 riviä voin käyttää komentoa</p>
             <p class="code">$ tail /var/log/syslog</p>
             <p>Käytän läppärissäni langatonta hiirtä, joten yhdistin sen koneeni USB-porttiin. Mietin näkyisikö esimerkiksi tämä tapahtuma lokissa ja siellähän se näkyi ja tietoa oli enemmän kuin ”laite yhdistetty”. Esimerkiksi mitä liitettiin, miltä valmistajalta ja hiiren mallikin. Laskisin tämän onnistuneeksi tapahtumaksi lokissa.</p>
-            <a href="../img/hiiri.jpg"><img src="../img/hiiri.jpg"></a><br>
+            <a href="../img/hiiri.jpg"><img src="../img/hiiri.jpg" alt="Loki hiiri"></a><br>
             <span>(Klikkaa kuva suuremmaksi)</span>
             <p>Seuraavaksi yritin luoda live-Linuxin oletuskäyttäjälle ”xubuntu” uutta salasanaa, jotta voin aiheuttaa tämän avulla virheen lokissa. Virhe tulikin jo salasanan luonnissa. Syötin komentoriville</p>
             <p class="code">$ passwd xubuntu</p>
             <p>Tämä toiminto ei onnistunut. Katsoin virheilmoituksen auth.logista komennolla </p>
             <p class="code">$ tail /var/log/auth.log</p>
             <p>Virhe johtui autentikointi-rajoitteesta. Olin käyttänyt jo salasanan vaihtamisessa "väärää salasanaa", eli kirjoittanut uutta salasanaa kohtaan, jossa oli käytettävä vanhaa salasanaa ennen sen vaihtamista. Päädyin kokeilemaan salasanan muuttamista pääkäyttäjän oikeuksilla, jolloin vanhaa salasanaa ei tarvinnut syöttää.</p>
-            <a href="../img/passwd.jpg"><img src="../img/passwd.jpg"></a><br>
+            <a href="../img/passwd.jpg"><img src="../img/passwd.jpg" alt="Passwd"></a><br>
             <span>(Klikkaa kuva suuremmaksi)</span>
         </div>
         <div class="blueBox">
@@ -100,15 +100,15 @@
             <p style="font-weight:bold"><a href="https://ffmpeg.org/about.html">FFmpeg</a>
             <p class="code">$ sudo apt-get install ffmpeg</p>
             <p>Olen aiemmin käyttänyt FFmpegin toiminnallisuuksia GUI wrapperin avulla videotiedostojen muodon kääntämiseen, mutta konsolista käsin sen käyttö on yksinkertaisuudessaan myös helppoa. Käytän todennäköisesti tulevaisuudessa kuitenkin wrapperia, sillä se yhdistää myös kätevästi AviSynthin editointi-mahdollisuuden.</p>
-            <a href="../img/ffmpeg.jpg"><img src="../img/ffmpeg.jpg"></a><br><br>
+            <a href="../img/ffmpeg.jpg"><img src="../img/ffmpeg.jpg" alt="FFMpeg"></a><br><br>
             <p style="font-weight:bold">nSnake - matopeli</p>
             <p class="code">$ sudo apt-get install nsnake</p>
             <p>Peli toimii hyvin. Asetuksia voi muuttaa ennen pelin alkua. Esim. madon nopeus, seinät, syötävien ruokien määrä, jne. Pelatessa ongelmana on kuitenkin se, että mato liikkuu nopeammin ylös ja alas kuin sivuille. 6/10</p>
-            <a href="../img/nsnake.jpg"><img src="../img/nsnake.jpg"></a><br><br>
+            <a href="../img/nsnake.jpg"><img src="../img/nsnake.jpg" alt="nSnake"></a><br><br>
             <p style="font-weight:bold">Tree - QoL konsolitoiminto</p>
             <p class="code">$ sudo apt-get install tree</p>
             <p>Yksinkertaisuudessaan lisää komennon "tree", joka näyttää alakansiot ja tiedostot helpommin luettavassa rakenteessa kuin "find".</p>
-            <a href="../img/tree.jpg"><img src="../img/tree.jpg"></a><br><br>
+            <a href="../img/tree.jpg"><img src="../img/tree.jpg" alt="Tree"></a><br><br>
         </div>
         <div class="blueBox">
             <h3>Lähteet</h3>
