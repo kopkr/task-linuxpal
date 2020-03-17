@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <title>Linux-palvelimet</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+</head>
+<body>
+    <header>
+        <a class="headlink" href="../index.html">
+            <h2>Linux-palvelimet <br>Harjoitus 7</h2>
+            <p>Kristian Koponen</p>
+        </a>
+    </header>
+    <div class="navBar">
+        <ul>
+            <li><a href="h1.html"><b>Harjoitus 1</b><br>Livetikku ja Linuxin testaus</a></li>
+            <li><a href="h2.html"><b>Harjoitus 2</b><br>Lokimuutoksia ja apt-get</a></li>
+            <li><a href="h3.html"><b>Harjoitus 3</b><br>Apache2 asennus, testailu ja lokin tarkastelu</a></li>
+            <li><a href="h4.html"><b>Harjoitus 4</b><br>Virtuaalipalvelin ja nimipalvelu</a></li>
+            <li><a href="h5.html"><b>Harjoitus 5</b><br>Python Flask</a></li>
+            <li><a href="h6.html"><b>Harjoitus 6</b><br>Tietokanta webissä</a></li>
+            <li><a class="active" href="h7.html"><b>Harjoitus 7</b><br>Vanha laboratorioharjoitus</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h2>Tietokanta webissä</h2>
+        <span>17.03.2020, Kristian Koponen</span>
+        <div class="blueBox">
+            <h3>Tehtävänanto<br><span class="small"><a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h7">Linux-palvelimet h7</a></span></h3>
+            <p>Ratkaise valitsemasi vanha arvioitava laboratorioharjoitus tältä kurssilta. <a href="http://terokarvinen.com/2018/arvioitava-laboratorioharjoitus-linux-palvelimet-ict4tn021-6-torstai-alkukevat-2018-5-op">Linkki valittuun tehtävään.</p>
+            <ul>
+                <li>
+                    <a href="h7.html#h7a">Asenna LAMP ja testaa</a>
+                </li>
+                <li>
+                    <a href="h7.html#h7b">Kuormitusta</a>
+                </li>
+                <li>
+                    <a href="h7.html#h7c">Sorkka ja Rauta Oy:n CRM</a>
+                </li>
+                <li>
+                    <a href="h7.html#h7d">Rosvoja porteilla</a>
+                </li>
+                <li>
+                    <a href="h7.html#h7e">Sorkan sivut</a>
+                </li>
+                <li>
+                    <a href="h7.html#h7f">Einarin esimerkki</a>
+                </li>
+            </ul>
+        </div>
+        <div class="blueBox">
+            <h3>Käytetyt laitteet</h3>
+            <p class="bold">Lenovo ThinkPad X220</p>
+            <table>
+                <tr>
+                    <th>Prosessori:</th>
+                    <th>Intel(R) Core(TM) i5-2540M @ 2.60Ghz</th>
+                </tr>
+                <tr>
+                    <th>Keskusmuisti:</th>
+                    <th>4GiB 1333Mhz DDR3</th>
+                </tr>
+                <tr>
+                    <th>Näytönohjain:</th>
+                    <th>Intel HD Graphics 3000</th>
+                </tr>
+                <tr>
+                    <th>Käyttöjärjestelmä:</th>
+                    <th>Windows 10 64-bit</th>
+                </tr>
+            </table>
+            <p class="bold">SanDisk Ultra USB 3.0 32 GB</p><span>xubuntu 18.04.3 amd64 -live</span><br><br>
+        </div>
+        
+        <div class="blueBox">
+            <h3 id="h7a">Asenna LAMP</h3>
+            <p>Asenna LAMP (Linux, Apache, MySQL, PHP) ja testaa sen toiminta.</p><br>
+            <p>Käytän harjoituksessa live-tikkua, joten en tule asentamaan Linuxia koneelleni.</p>
+            
+            <h4>Apachen asennus ja testaus</h4>
+            <p>Päivitetään ohjelmistopaketit ja asennetaan Apache2</p>
+            <p class="code">$ sudo apt-get update && sudo apt-get install apache2 -y</p>
+            <p>Korvataan Apachen oletussivun sisältö ja katsotaan localhostista toimiiko Apache</p>
+            <p class="code">
+                $ echo "Apache toimii"|sudo tee /var/www/html/index.html<br>
+                $ sudo apt-get install curl -y<br>
+                $ curl localhost<br>
+                Apache toimii
+            </p>
+            
+            <h4>MySQL asennus ja testaus</h4>
+            <p>PostgreSQL on tutumpi joten käytän sitä. Asennetaan</p>
+            <p class="code">
+                $ sudo apt-get install postgresql -y
+            </p>
+            <p>Kirjaudutaan postgresin oletuskäyttäjänä sisään ja mennään postgres käyttöympäristöön.</p>
+            <p class="code">
+                $ sudo su postgres<br>
+                $ psql
+            </p>
+            <p>Luodaan uusi postgres käyttäjä.</p>
+            <p class="code">CREATE ROLE xubuntu WITH LOGIN SUPERUSER CREATEDB ENCRYPTED PASSWORD '<span style="color:khaki;">**********</span>';</p>
+            <p>Tarkastetaan käyttäjälista</p>
+            <p class="code">\du</p>
+            <a href="../img/h7/h7img1.jpg"><img src="../img/h7/h7img1.jpg" alt="postgres_users"></a><br>
+            <p>Vaihdetaan takaisin omaan käyttäjään ja luodaan testikanta.</p>
+            <p class="code">
+                $ su xubuntu<br>
+                $ createdb testikanta<br>
+                $ psql testikanta
+            </p>
+            <p>Katsotaan tietokannat.</p>
+            <p class="code">\l</p>
+            <a href="../img/h7/h7img2.jpg"><img src="../img/h7/h7img2.jpg" alt="tietokannat"></a><br>
+            <p>Syötetään testikantaan uusi taulu testausmielessä ja tulostetaan.</p>
+            <p class="code">
+                CREATE TABLE koirat (id SERIAL PRIMARY KEY, nimi VARCHAR NOT NULL, rotu VARCHAR NOT NULL);<br>
+                INSERT INTO koirat (nimi, rotu) VALUES ('Beethoven', 'Bernhardilainen');<br>
+                INSERT INTO koirat (nimi, rotu) VALUES ('Vili', 'Schipperke');<br>
+                SELECT * FROM koirat;
+            </p>
+            <a href="../img/h7/h7img3.jpg"><img src="../img/h7/h7img3.jpg" alt="koirat_taulu"></a><br>
+            <p>PostgreSQL toimii oletetusti.</p>
+            
+            <h4>PHP:n asennus ja testaus</h4>
+            <p>Asennetaan PHP, sekä apache-moduuli.</p>
+            <p class="code">$ sudo apt-get install php libapache2-mod-php</p>
+            <p>Luodaan käyttäjän kotihakemistoon kansio, johon luodaan php-testitiedosto.</p>
+            <p class="code">
+                $ mkdir testaus<br>
+                $ nano testaus/index.php
+            </p>
+            <p class="code">
+                &lt;?php<br> 
+                Print "Hello, PHP!";<br>
+                ?&gt;
+            </p>
+            <p>Luodaan Apachelle tarvittavat konfiguraatiotiedostot ja otetaan käyttöön.</p>
+            <p class="code">
+                $ sudoedit /etc/apache2/sites-available/testaus.conf
+            </p>
+            <p class="code">
+                &lt;VirtualHost *:80&gt;<br>
+                &nbsp;&nbsp;&nbsp;ServerName testaus.example.com<br>
+                &nbsp;&nbsp;&nbsp;DocumentRoot /home/xubuntu/testaus<br>
+                &nbsp;&nbsp;&nbsp;&lt;Directory /home/xubuntu/testaus&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Require all granted<br>
+                &nbsp;&nbsp;&nbsp;&lt;/Directory&gt;<br>
+                &lt;/VirtualHost&gt;
+            </p>
+            <p class="code">
+                $ sudo a2ensite testaus.conf<br>
+                $ sudo a2dissite 000-default.conf<br>
+                $ sudo apachectl configtest<br>
+                $ sudo systemctl restart apache2
+            </p>
+            <p>Katsotaan localhost</p>
+            <p class="code">
+                $ curl localhost<br>
+                Hello, PHP!
+            </p>
+            <p>PHP toimii.</p>
+        </div>
+        <div class="blueBox">
+            <h3 id="h7b">Kuormitusta</h3>
+            <p>Kerää kuormitustietoja koneelta koko harjoituksen ajalta. Analysoi tiedot tiiviisti aivan harjoituksen lopuksi.</p><br>
+            <p>Asennetaan Munin-niminen monitorointityökalu.</p>
+            <p class="code">$ sudo apt-get install munin munin-node -y</p>
+            <p>Hetken kuluttua Munin alkaa näyttämään suoritustietoja, jotka se esittää kätevästi html tiedoistossa. Nämä sijaitsevat /var/cache/munin/www/ -kansiossa. Voidaan selata niitä Firefoxilla.</p>
+            <p class="code">$ firefox /var/cache/munin/www/index.html</p>
+            <p>Testataan Muninin toimintaa. Ladataan kuormitustyökalu.</p>
+            <p class="code">$ sudo apt-get install stress -y</p>
+            <p>Katsotaan kuormitustyökalun manuaalia.</p>
+            <p class="code">$ man stress</p>
+            <p>Käytetään sieltä löytyvää esimerkki-komentoa.</p>
+            <p class="code">
+                $ stress --cpu 8 --io 4 --vm 2 --vm-bytes 128M --timeout 30s<br>
+                stress: info: [11614] dispatching hogs: 8 cpu, 4 io, 2vm, 0 hdd<br>
+                stress: info: [11614] succesful run completed in 30s
+            </p>
+            <p>Munin-graafeissa näkyy piikki tämän 30 sekunnin ajalta. Toimii. Jätetään Munin-pyörimään taustalle.</p>
+        </div>
+        <div class="blueBox">
+            <h3 id="h7c">Sorkka ja Rauta CRM</h3>
+            <p>
+                Tarvitsemme asiakastietokannan. Tee tietokanta, jossa on seuraavat asiakkaat:<br>
+                - Kulta ja Kaivos ky<br>
+                - Piilosana ry<br>
+                - MetalliMake<br>
+                Tee PHP-ohjelma, joka lukee nämä tietueet. Laita tämä sivu näkyviin osoitteessa<br>
+                http://sorkkacrm.example.com<br>
+                Voit simuloida nimipalvelun toimintaa hosts-tiedoston avulla. Tässä harjoituksessa sivulle
+                pääsyä ei tarvitse rajoittaa salasanalla, vaan sen tule näkyä kaikkialle nettiin.
+            </p><br>
+            <h4>Tietokanta</h4>
+            <p>Luodaan tietokanta "sorkkacrmdb".</p>
+            <p class="code">
+                $ createdb sorkkacrmdb
+            </p>
+            <p>Avataan tietokanta "sorkkacrmdb"</p>
+            <p class="code">$ psql sorkkacrmdb</p>
+            <p>Syötetään halutut tiedot uuteen tauluun nimeltä "asiakkaat".</p>
+            <p class="code">
+                CREATE TABLE asiakkaat (id SERIAL PRIMARY KEY, yritysnimi VARCHAR NOT NULL);<br>
+                INSERT INTO asiakkaat (yritysnimi) VALUES ('Kulta ja Kaivos ky');<br>
+                INSERT INTO asiakkaat (yritysnimi) VALUES ('Piilosana ry');<br>
+                INSERT INTO asiakkaat (yritysnimi) VALUES ('MetalliMake'); 
+            </p>
+            <p>Katsotaan että halutut tiedot ovat taulussa.</p>
+            <p class="code">SELECT * FROM asiakkaat;</p>
+            <a href="../img/h7/h7img4.jpg"><img src="../img/h7/h7img4.jpg" alt="tietokannat"></a><br>
+            <h4>PHP-ohjelma</h4>
+            <p>Aloitetaan konfiguraatio-tiedoston luomisesta.</p>
+            <p class="code">$ sudoedit /etc/apache2/sites-available/sorkkacrm.conf</p>
+            <p class="code">
+                &lt;VirtualHost *:80&gt;<br>
+                &nbsp;&nbsp;&nbsp;ServerName sorkkacrm.example.com<br>
+                &nbsp;&nbsp;&nbsp;DocumentRoot /home/sorkkacrm/sorkkacrm<br><br>
+                &nbsp;&nbsp;&nbsp;&lt;Directory /home/sorkkacrm/sorkkacrm&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Require all granted<br>
+                &nbsp;&nbsp;&nbsp;&lt;/Directory&gt;<br>
+                &lt;/VirtualHost&gt;
+            </p>
+            <p>Otetaan juuri luotu konfiguraatio käyttöön ja poistetaan oletuskonfiguraatio pois käytöstä.</p>
+            <p class="code">
+                $ sudo a2ensite sorkkacrm.conf<br>
+                $ sudo a2dissite 000-default.conf<br>
+                $ sudo apachectl configtest<br>
+                $ sudo systemctl restart apache2 
+            </p>
+            <p>Testataan localhostista sivun kunto</p>
+            <p>Luodaan uusi käyttäjä ohjelmalle ja lukitaan sille kirjautuminen.</p>
+            <p class="code">
+                $ sudo adduser sorkkacrm<br>
+                $ sudo usermod --lock sorkkacrm
+            </p>
+            <p>Lisätään oma käyttäjä sorkkacrm:n ryhmään.</p>
+            <p class="code">$ sudo adduser xubuntu sorkkacrm</p>
+            <p>Kirjaudutaan ulos ja takaisin, jotta ryhmä tulee omalle käyttäjälle aktiiviseksi.</p>
+            <p>Luodaan kansio Sorkka CRM -ohjelmalle.</p>
+            <p class="code">$ sudo mkdir /home/sorkkacrm/sorkkacrm</p>
+            <p>Nyt kansio on luotu root-käyttäjänä. Vaihdetaan oikeudet kaikille sorkkacrm -ryhmään kuuluville.</p>
+            <p class="code">
+                $ sudo chown sorkkacrm:sorkkacrm /home/sorkkacrm/sorkkacrm<br>
+                $ sudo chmod g=rwxs /home/sorkkacrm/sorkkacrm
+            </p>
+            <p>Luodaan kansioon PHP-tiedosto.</p>
+            <p class="code">$ nano home/sorkkacrm/sorkkacrm/index.php</p>
+            <p class="code">
+                &lt;!DOCTYPE html&gt;<br>
+                &lt;html&gt;<br>
+                &lt;head&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;title&gt;Sorkka CRM&lt;/title&gt;<br>
+                &lt;/head&gt;<br>
+                &lt;body&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;h3&gt;Asiakasyritykset&lt;/h3&gt;<br>
+                &lt;?php<br>
+                &nbsp;&nbsp;&nbsp;$connStr = "host=localhost dbname=sorkkacrmdb user=xubuntu password=<span style="color:khaki;">**********</span>";<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;$conn = pg_connect($connStr);<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;if (!$conn) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo "Error: Yhteys epäonnistui.\n";<br>
+                &nbsp;&nbsp;&nbsp;exit;<br>
+                &nbsp;&nbsp;&nbsp;}<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;$rs = pg_query($conn, "SELECT * FROM asiakkaat");<br>
+                &nbsp;&nbsp;&nbsp;if (!$rs) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo "Error: Tyhjä tulos.\n";<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;exit;<br>
+                &nbsp;&nbsp;&nbsp;}<br>
+                <br>
+                &nbsp;&nbsp;&nbsp;while ($row = pg_fetch_row($rs)) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo "\t&lt;p&gt;$row[1]&lt;/p&gt;\n";<br>
+                &nbsp;&nbsp;&nbsp;}<br>
+                <br>
+                ?&gt;<br>
+                &lt;/body&gt;<br>
+                &lt;/html&gt;<br>
+            </p>
+            <p>Avataan localhost joko Firefoxilla tai</p>
+            <p class="code">$ curl localhost</p>
+            <p>Mitään ei tapahtunut. Tarkastetaan Apachen virheloki.</p>
+            <p class="code">
+                $ tail -1 /var/log/apache2/error.log<br><br>
+                [Tue Mar 17 20:42:22.557841 2020] [php7:error] [pid 16355] [client 127.0.0.1:49088] PHP Fatal error: Uncaught Error: Call to undefined function pg_connect() in /home/sorkkacrm/sorkkacrm/index.php ...
+            </p>
+            <p>Etsin DuckDuckGo:sta kyseisellä virheilmoituksella ja selvisi että puuttuu PostgreSQL:n PHP-moduuli.</p>
+            <p class="code">sudo apt-get install php-pgsql -y</p>
+            <p>Kokeillaan uudestaan.</p>
+            <a href="../img/h7/h7img5.jpg"><img src="../img/h7/h7img5.jpg" alt="sorkka_CRM sivu"></a><br>
+            <p>Sorkka CRM -ohjelma toimii nyt vaaditusti.</p>
+            <p>Simuloidaan vielä nimipalvelun toimintaa lisäämällä osoite hosts-tiedostoon.</p>
+            <p class="code">$ sudoedit /etc/hosts</p>
+            <p class="code">
+                127.0.0.1 localhost<br>
+                127.0.0.1 xubuntu<br>
+                127.0.0.1 sorkkacrm.example.com<br><br>
+                ...
+            </p>
+            <p>Nyt sivulle pääsee myös sorkkacrm.example.com nimellä.</p>
+        </div>
+        <div class="blueBox">
+            <h3 id="h7d">Rosvoja porteilla</h3>
+            <p>
+                Onko koneellemme yritetty murtautua? Etsi omalta paikalliselta koneeltasi todisteet
+                tapauksesta, jossa koneellesi on yritetty murtatua. Analysoi tiiviisti tähän liittyvät tiedot.
+            </p><br>
+            <p>Oletettavasti paikalliselle koneelleni ei ole kukaan yrittänyt murtautua. Vanhassa laboratoriokoneessa opettaja on todennäköisesti pyrkinyt murtautumaan.</p>
+            <p>Voidaan kuitenkin tarkastaa</p>
+            <p class="code">$ cat /var/log/auth.log|grep "authentication failure"</p>
+            <p>Tyhjää näyttää. Kyseisessä tiedostossa näkyy vain omia sudottelujani ja käyttäjien vaihtamista.</p>
+        </div>
+        <div class="blueBox">
+            <h3 id="h7e">Sorkan sivut</h3>
+            <p>
+                Tee staattinen HTML5 weppisivu, jonka otsikkona (molemmat title ja h1) on "Sorkka ja Rauta Oy".
+                Laita sivu näkyviin osoitteeseen http://rauta.example.com/ . Voit simuloida nimipalvelun toimintaa
+                hosts-tiedoston avulla.
+            </p><br>
+            <p>Luodaan Apachen konfiguraatiotiedosto</p>
+            <p class="code">$ sudoedit /etc/apache/sites-available/rauta.conf</p>
+            <p class="code">
+                &lt;VirtualHost *:80&gt;<br>
+                &nbsp;&nbsp;&nbsp;ServerName sorkkacrm.example.com<br>
+                &nbsp;&nbsp;&nbsp;DocumentRoot /home/sorkkacrm/sorkkacrm<br>
+                <br>    
+                &nbsp;&nbsp;&nbsp;&lt;Directory /home/sorkkacrm/sorkkacrm&gt;<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Require all granted<br>
+                &nbsp;&nbsp;&nbsp;&lt;/Directory&gt;<br>
+                &lt;/VirtualHost&gt;<br>
+            </p>
+            <p>Otetaan kyseinen konfiguraatio käyttöön ja käynnistetään apache uudelleen.</p>
+            <p class="code">
+                $ sudo a2ensite rauta.conf<br>
+                $ sudo apachectl configtest<br>
+                $ sudo systemctl restart apache2 
+            </p>
+            <p>Simuloidaan nimipalvelua hosts-tiedostossa.</p>
+            <p class="code">$ sudoedit /etc/hosts</p>
+            <p class="code">
+                127.0.0.1 localhost<br>
+                127.0.0.1 xubuntu<br>
+                127.0.0.1 sorkkacrm.example.com<br>
+                127.0.0.1 rauta.example.com<br><br>
+                ...
+            </p>
+            <p>Luodaan kansio ja index.html</p>
+            <p class="code">
+                $ mkdir /home/xubuntu/rauta<br>
+                $ nano /home/xubuntu/rauta/index.html
+            </p>
+            <p class="code">
+                &lt;!DOCTYPE html&gt;<br>
+                &lt;html&gt;<br>
+                &lt;head&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;title&gt;Sorkka ja Rauta Oy&lt;/title&gt;<br>
+                &lt;/head&gt;<br>
+                &lt;body&gt;<br>
+                &nbsp;&nbsp;&nbsp;&lt;h1&gt;Sorkka ja Rauta Oy&lt;/h1&gt;<br>
+                &lt;/body&gt;<br>
+                &lt;/html&gt;<br>
+            </p>
+            <p>Avataan sivu</p>
+            <p class="code">$ firefox rauta.example.com</p>
+            <a href="../img/h7/h7img6.jpg"><img src="../img/h7/h7img6.jpg" alt="sorkka_CRM sivu"></a><br>
+            <p>Sivu tulee näkyviin ja kaikki toimii.</p>
+        </div>
+        <div class="blueBox">
+            <h3 id="h7f">Einarin esimerkki</h3>
+            <p>
+                Einari Vähä-aho ryhtyy koodaamaan. Tee einarille käyttäjä 'einari'.<br>
+                Tee einarille esimerkkikotisivu PHP:lla ja laita se näkymään osoitteessa http://localhost/~einari/ .
+                Esimerkkisivun pitää tulostaa "Einari" käyttäen PHP:n print-funktiota.
+            </p><br>
+            <p>Luodaan Einarille käyttäjä ja vaihdetaan einarin käyttäjään.</p>
+            <p class="code">
+                $ sudo adduser einari<br>
+                $ su einari
+            </p>
+            <p>Tehdään Einarin kotihakemistoon kansio käyttäjäsivuja varten.</p>
+            <p class="code">
+                $ cd<br>
+                $ mkdir public_html
+            </p>
+            <p>Luodaan yksinkertainen PHP-tiedosto.</p>
+            <p class="code">$ nano index.php</p>
+            <p class="code">
+                &lt;?php<br>
+                &nbsp;&nbsp;&nbsp;print("Hello Einari");<br>
+                ?&gt;
+            </p>
+            <p>Siirrytään takaisin pääkäyttäjäksi ja laitetaan User Directoryt toimimaan.</p>
+            <p class="code">
+                $ su xubuntu<br>
+                $ sudo a2enmod userdir<br>
+                $ sudo systemctl restart apache2
+            </p>
+            <p>Ei toimi vielä. Apache2 on oletusarvoisesti estänyt PHP-koodit käyttäjähakemistoissa. Kommentoidaan Apachen konfiguraatioista tämän estävä kohta pois. Hyvien tapojen mukaisesti kommentoidaan myös kuka tätä on muuttanut.</p>
+            <p class="code">$ sudoedit /etc/apache2/mods-available/php7.2.conf</p>
+            <p class="code">
+                ### xubuntu-käyttäjä otti tämän pois käytöstä - 17.03.2020<br>
+                #&lt;IfModule mod_userdir.c&gt;<br>
+                #&nbsp;&nbsp;&nbsp;&lt;Directory /home/*/public_html&gt;<br>
+                #&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;php_admin_flag engine Off<br>
+                #&nbsp;&nbsp;&nbsp;&lt;/Directory&gt;<br>
+                #&lt;/IfModule&gt;<br>
+            </p>
+            <p>Käynnistetään apache uudelleen ja kokeillaan.</p>
+            <p class="code">$ sudo systemctl restart apache2</p>
+            <p class="code">
+                $ curl localhost/~einari/<br>
+                Hello Einari
+            </p>
+            <p>Einari voi nyt koodailla PHP:lla.</p>
+        </div>
+        <div class="blueBox">
+            <h3>Lähteet</h3>
+            <p>
+                <a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h7">http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h7</a><br>
+                <a href="http://www.yolinux.com/TUTORIALS/LinuxTutorialPostgreSQL.html">http://www.yolinux.com/TUTORIALS/LinuxTutorialPostgreSQL.html</a><br>
+                <a href="http://terokarvinen.com/2016/read-mysql-database-with-php-php-pdo">http://terokarvinen.com/2016/read-mysql-database-with-php-php-pdo</a><br>
+                <a href="https://www.php.net/manual/en/function.pg-connect.php">https://www.php.net/manual/en/function.pg-connect.php</a><br>
+                <a href="https://www.php.net/manual/en/function.pg-query.php">https://www.php.net/manual/en/function.pg-query.php</a><br>
+                <a href="https://medium.com/@Riverside/how-to-install-apache-php-postgresql-lapp-on-ubuntu-16-04-adb00042c45d">https://medium.com/@Riverside/how-to-install-apache-php-postgresql-lapp-on-ubuntu-16-04-adb00042c45d</a><br>
+                <a href="http://www.techytalk.info/enable-userdir-apache-module-ubuntu-debian-based-linux-distributions/">http://www.techytalk.info/enable-userdir-apache-module-ubuntu-debian-based-linux-distributions/</a><br>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
