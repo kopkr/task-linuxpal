@@ -21,6 +21,7 @@
             <li><a href="h5.html"><b>Harjoitus 5</b><br>Python Flask</a></li>
             <li><a href="h6.html"><b>Harjoitus 6</b><br>Tietokanta webissä</a></li>
             <li><a class="active" href="h7.html"><b>Harjoitus 7</b><br>Vanha laboratorioharjoitus</a></li>
+            <li><a href="h8.html"><b>Harjoitus 8</b><br>Prosessinhallintaa ja lokeja</a></li>
         </ul>
     </div>
     <div class="content">
@@ -28,7 +29,7 @@
         <span>17.03.2020, Kristian Koponen</span>
         <div class="blueBox">
             <h3>Tehtävänanto<br><span class="small"><a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h7">Linux-palvelimet h7</a></span></h3>
-            <p>Ratkaise valitsemasi vanha arvioitava laboratorioharjoitus tältä kurssilta. <a href="http://terokarvinen.com/2018/arvioitava-laboratorioharjoitus-linux-palvelimet-ict4tn021-6-torstai-alkukevat-2018-5-op">Linkki valittuun tehtävään.</p>
+            <p>Ratkaise valitsemasi vanha arvioitava laboratorioharjoitus tältä kurssilta. <a href="http://terokarvinen.com/2018/arvioitava-laboratorioharjoitus-linux-palvelimet-ict4tn021-6-torstai-alkukevat-2018-5-op">Linkki valittuun tehtävään.</a></p>
             <ul>
                 <li>
                     <a href="h7.html#h7a">Asenna LAMP ja testaa</a>
@@ -76,7 +77,7 @@
         
         <div class="blueBox">
             <h3 id="h7a">Asenna LAMP</h3>
-            <p>Asenna LAMP (Linux, Apache, MySQL, PHP) ja testaa sen toiminta.</p><br>
+            <p class="assignment">Asenna LAMP (Linux, Apache, MySQL, PHP) ja testaa sen toiminta.</p>
             <p>Käytän harjoituksessa live-tikkua, joten en tule asentamaan Linuxia koneelleni.</p>
             
             <h4>Apachen asennus ja testaus</h4>
@@ -171,7 +172,7 @@
         </div>
         <div class="blueBox">
             <h3 id="h7b">Kuormitusta</h3>
-            <p>Kerää kuormitustietoja koneelta koko harjoituksen ajalta. Analysoi tiedot tiiviisti aivan harjoituksen lopuksi.</p><br>
+            <p class="assignment">Kerää kuormitustietoja koneelta koko harjoituksen ajalta. Analysoi tiedot tiiviisti aivan harjoituksen lopuksi.</p><br>
             <p>Asennetaan Munin-niminen monitorointityökalu.</p>
             <p class="code">$ sudo apt-get install munin munin-node -y</p>
             <p>Hetken kuluttua Munin alkaa näyttämään suoritustietoja, jotka se esittää kätevästi html tiedoistossa. Nämä sijaitsevat /var/cache/munin/www/ -kansiossa. Voidaan selata niitä Firefoxilla.</p>
@@ -190,7 +191,7 @@
         </div>
         <div class="blueBox">
             <h3 id="h7c">Sorkka ja Rauta CRM</h3>
-            <p>
+            <p class="assignment">
                 Tarvitsemme asiakastietokannan. Tee tietokanta, jossa on seuraavat asiakkaat:<br>
                 - Kulta ja Kaivos ky<br>
                 - Piilosana ry<br>
@@ -199,7 +200,7 @@
                 http://sorkkacrm.example.com<br>
                 Voit simuloida nimipalvelun toimintaa hosts-tiedoston avulla. Tässä harjoituksessa sivulle
                 pääsyä ei tarvitse rajoittaa salasanalla, vaan sen tule näkyä kaikkialle nettiin.
-            </p><br>
+            </p>
             <h4>Tietokanta</h4>
             <p>Luodaan tietokanta "sorkkacrmdb".</p>
             <p class="code">
@@ -310,10 +311,10 @@
         </div>
         <div class="blueBox">
             <h3 id="h7d">Rosvoja porteilla</h3>
-            <p>
+            <p class="assignment">
                 Onko koneellemme yritetty murtautua? Etsi omalta paikalliselta koneeltasi todisteet
                 tapauksesta, jossa koneellesi on yritetty murtatua. Analysoi tiiviisti tähän liittyvät tiedot.
-            </p><br>
+            </p>
             <p>Oletettavasti paikalliselle koneelleni ei ole kukaan yrittänyt murtautua. Vanhassa laboratoriokoneessa opettaja on todennäköisesti pyrkinyt murtautumaan.</p>
             <p>Voidaan kuitenkin tarkastaa</p>
             <p class="code">$ cat /var/log/auth.log|grep "authentication failure"</p>
@@ -321,11 +322,11 @@
         </div>
         <div class="blueBox">
             <h3 id="h7e">Sorkan sivut</h3>
-            <p>
+            <p class="assignment">
                 Tee staattinen HTML5 weppisivu, jonka otsikkona (molemmat title ja h1) on "Sorkka ja Rauta Oy".
                 Laita sivu näkyviin osoitteeseen http://rauta.example.com/ . Voit simuloida nimipalvelun toimintaa
                 hosts-tiedoston avulla.
-            </p><br>
+            </p>
             <p>Luodaan Apachen konfiguraatiotiedosto</p>
             <p class="code">$ sudoedit /etc/apache/sites-available/rauta.conf</p>
             <p class="code">
@@ -376,11 +377,11 @@
         </div>
         <div class="blueBox">
             <h3 id="h7f">Einarin esimerkki</h3>
-            <p>
+            <p class="assignment">
                 Einari Vähä-aho ryhtyy koodaamaan. Tee einarille käyttäjä 'einari'.<br>
                 Tee einarille esimerkkikotisivu PHP:lla ja laita se näkymään osoitteessa http://localhost/~einari/ .
                 Esimerkkisivun pitää tulostaa "Einari" käyttäen PHP:n print-funktiota.
-            </p><br>
+            </p>
             <p>Luodaan Einarille käyttäjä ja vaihdetaan einarin käyttäjään.</p>
             <p class="code">
                 $ sudo adduser einari<br>

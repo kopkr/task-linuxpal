@@ -21,12 +21,13 @@
             <li><a href="h5.html"><b>Harjoitus 5</b><br>Python Flask</a></li>
             <li><a href="h6.html"><b>Harjoitus 6</b><br>Tietokanta webissä</a></li>
             <li><a href="h7.html"><b>Harjoitus 7</b><br>Vanha laboratorioharjoitus</a></li>
+            <li><a href="h8.html"><b>Harjoitus 8</b><br>Prosessinhallintaa ja lokeja</a></li>
         </ul>
     </div>
     <div class="content">
         <h2>Apache2 asennus, testailu ja lokin tarkastelu</h2>
         <span>11.02.2020, Kristian Koponen</span><br>
-        <span>Muokattu, 08.03.2020</span>
+        <span>Muokattu ulkoasua, 08.03.2020</span>
         <div class="blueBox">
             <h3>Tehtävänanto<br><span class="small"><a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h3">Linux-palvelimet h3</a></p></h3>
             <ul>
@@ -73,55 +74,55 @@
         <div class="blueBox">
             <h3 id="h3a">Apachen asentaminen ja käyttäjän kotisivu</h3>
             <p>Aloitan päivityksellä, eli komennoilla</p>
-            <p class="code">sudo apt-get update && sudo apt-get upgrade</p>
+            <p class="code">$ sudo apt-get update && sudo apt-get upgrade</p>
             <p>Seuraavaksi  asennan apache2 web-palvelimen komennolla</p>
-            <p class="code">sudo apt-get install apache2 -y</p>
+            <p class="code">$ sudo apt-get install apache2 -y</p>
             <p>Testasin että sovellus toimii avaamalla selaimellani localhost -sivun. Testasin saman myös IP-osoitteellani, jonka hain komennolla
-            <p class="code">ip addr</p>
+            <p class="code">$ ip addr</p>
             <p>Toimi hyvin kummallakin tavalla</p>
             <a href="../img/h3/h3img1.jpg"><img src="../img/h3/h3img1.jpg" alt="h3img1"></a>
             <p>Seuraavaksi luon käyttäjälle kotisivun. Userdirin aktivoimiseksi käytän komentoa</p>
-            <p class="code">sudo a2enmod userdir</p>
+            <p class="code">$ sudo a2enmod userdir</p>
             <p>Konsoliin tulee viesti siitä, että muutoksia varten on käynnistettävä apache2 uudelleen, joka hoituu komennolla
-            <p class="code">sudo systemctl restart apache2</p><br>
+            <p class="code">$ sudo systemctl restart apache2</p><br>
             <a href="../img/h3/h3img2.jpg"><img src="../img/h3/h3img2.jpg" alt="h3img2"></a><br><br>
 
             <p>Luon oletuskäyttäjälle "xubuntu" public_html kansion komennolla</p>
-            <p class="code">mkdir public_html</p>
+            <p class="code">$ mkdir public_html</p>
             <p>Tämän kotihakemistoon. Luon yksinkertaisen index.html tiedoston kansioon. Navigoidaan selaimella osoitteeseen localhost/~xubuntu testataksemme, että käyttäjän sivu toimii.</p>
             <a href="../img/h3/h3img3.jpg"><img src="../img/h3/h3img3.jpg" alt="h3img3"></a><br><br>
         </div>
         <div class="blueBox">
             <h3 id="h3h">Name Based Virtual Host ja DocumentRoot käyttäjän kotihakemistoon</h3>
             <p>Aloitetaan navigoimalla sites-available kansioon komennolla </p>
-            <p class="code">cd /etc/apache2/sites-available/</p>
+            <p class="code">$ cd /etc/apache2/sites-available/</p>
             <p>ja luomalla uusi tiedosto komennolla
             </p>
-            <p class="code">sudoedit xubtest.com.conf</p>
+            <p class="code">$ sudoedit xubtest.com.conf</p>
             <p>Kirjoitetaan sinne servername, alias ja kansio johon halutaan viitata. Aktivoidaan konfiguraatio komennolla</p>
-            <p class="code">sudo a2ensite xubtest.com.conf</p>
+            <p class="code">$ sudo a2ensite xubtest.com.conf</p>
             <p>ja luetaan konfiguraatiotiedostot uudelleen komennolla</p>
-            <p class="code">sudo systemctl reload apache2</p>
+            <p class="code">$ sudo systemctl reload apache2</p>
             <br>
             <a href="../img/h3/h3img4.jpg"><img src="../img/h3/h3img4.jpg" alt="h3img4"></a><br><br>
         </div>
         <div class="blueBox">
             <h3 id="h3b">Apachen lokit</h3>
             <p>Lähden nyt testaamaan edellistä osaa. Sillä xubtest.com domainia ei oikeasti ole, ihan aluksi muokkaan /etc/hosts -tiedostoa</p>
-            <p class="code">sudo nano /etc/hosts</p>
+            <p class="code">$ sudo nano /etc/hosts</p>
             <p>Ohjaan siellä selaimen oikeaan paikkaan lisäämällä sinne</p>
             <p class="code">127.0.0.1 xubtest.com</p><br>
             <a href="../img/h3/h3img5.jpg"><img src="../img/h3/h3img5.jpg" alt="h3img5"></a><br>
             <p>Koitan nyt hakea selaimella osoitetta xubtest.com. Sieltä tulee virhe "403 Forbidden". Tarkastelen apachen virhelokia nähdäkseni viimeisimmän tapahtuman.</p>
-            <p class="code">tail -n 1 /var/log/apache2/error.log</p>
+            <p class="code">$ tail -n 1 /var/log/apache2/error.log</p>
             <p>Virheilmoitus ei ollut mitä kuvittelin. Odotin valitusta puuttuvasta hakemistosta, sillä konfiguraatio-tiedosto viittaa xubtest.com kansioon käyttäjän kotihakemistossa. Sainkin seuraavanlaisen virheilmoituksen.</p>
             <p class="code">[Tue Feb 11 21:05:03.873605 2020] [authz_core:error] [pid 19306:tid 140272692360960] [client 127.0.0.1:47384] AH01630: client denied by server configuration: /home/xubuntu/xubtest.com</p>
             <p>Luen nyt Apachen dokumentointia selvittääkseni asiaa. Ensimmäisenä näemme ajankohdan, jolloin virhe tapahtui. Seuraavana näkyy moduuli, joka tuotti lokimerkinnän. Tätä seuraa prosessin ID ja thread ID. Ennen jyvälle pääsemistä näkyy vielä asiakas joka virheen aiheutti. Viimeisimpänä näkyy oleellisin, eli mikä virhe tuli ja sen tunnus. Tässä tapauksessa virheilmoitus "AH01630" kertoo, että asiakasohjelman pääsy on evätty palvelinkonfiguraation vuoksi, vaikka konfiguraatiotiedostossa oli kirjoitettu "Require all granted" sille kuuluvalle paikalle.</p>
             <p>Etsin virhekoodilla lisätietoa stackoverflow:sta ja siellä eräs käyttäjä kertoo, että virhe tulee virheellisestä DocumentRoot hakemistosta, eli juuri mitä odotin. Korjaan asian luomalla kotihakemistoon xubtest.com kansion komennolla</p>
-            <p class="code">cd && mkdir xubtest.com</p>
+            <p class="code">$ cd && mkdir xubtest.com</p>
             <p>ja luon kopioin sinne public_html kansioon luomani index.html tiedoston komennolla</p>
-            <p class="code">cp public_html/index.html xubtest.com/</p>
-            <p>Nyt kun yritän päästä sivulle xubtest.com, tulee luomani index.html -sivu esiin. Katson vielä access-lokia komennolla <p class="code">tail -n 1 var/log/apache2/access.log</p>
+            <p class="code">$ cp public_html/index.html xubtest.com/</p>
+            <p>Nyt kun yritän päästä sivulle xubtest.com, tulee luomani index.html -sivu esiin. Katson vielä access-lokia komennolla <p class="code">$ tail -n 1 var/log/apache2/access.log</p>
             <p>ja saan seuraavanlaisen rivin.</p>
             <p class="code">127.0.0.1 - - [11/Feb/2020:21:22:32 +0000] "GET / HTTP/1.1" 200 301 "-" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:72.0) Gecko/20100101 Firefox/72.0"</p>
             <p>Ensimmäisenä näemme localhostin IP-osoitteen. Yhteys tuli tästä koneesta. Toisena näemme ajankohdan, jolloin yhteyspyyntö tuli. Seuraavan näemme tietoa pyyntitavasta. Tässä tapauksessa GET-metodilla, HTTP 1.1:n yli. Seuraavaksi on status-koodi; 200 tarkoittaa OK. Tämän numeron jälkeen näemme tarjoillun sisällön kokoa. Välissä on mysteerinen viiva lainausmerkeissä. Lopputieto on selaimen yksityiskohtia. Mozilla Firefox 64-bittiselle Ubuntulle, joka toimii Gecko-selainmoottorilla.</p>
@@ -130,16 +131,16 @@
             <h3 id="h3m">Oletussivun vaihtaminen.</h3>
             <p>Tässä vaiheessa meillä on toimiva index.html -sivu käyttäjän kotihakemistossa, joka tarjoillaan xubtest.com osoitteella, eli eri sisältö kuin mitä localhostiin tulee oletusarvoisesti 000-default.conf konfiguraation mukaisesti. Nyt palvelimen IP-osoitteella aukeaa apache2:n oletussivu /var/www/ -kansiosta.</p>
             <p>Haluan vaihtaa oletussivun palvelimella. Kytketään oletus-konfiguraatio 000-default.conf pois päältä komennolla</p>
-            <p class="code">sudo a2dissite 000-default.conf</p>
+            <p class="code">$ sudo a2dissite 000-default.conf</p>
             <p>Lataan apache2:n uudelleen komennolla</p>
-            <p class="code">sudo systemctl reload apache2</p>
+            <p class="code">$ sudo systemctl reload apache2</p>
             <p>Muokkasin hieman xubuntu/public_html/ -kansiossa olevaa index.html tiedostoa erottaakseni sen xubuntu/xubtest.com/ -kansiossa olevasta tiedostosta. Kokeilin avata IP-osoitteella sivun ja uudistettu index.html aukesi selaimeeni.</p>
         </div>
         <div class="blueBox">
             <h3 id="h3dn">Useampi nimi samaan IP-osoitteeseen ja virheilmoitus Apachen asetustiedostossa</h3>
             <p>Palaan tässä vaiheessa eri nimien luontiin. Hakeudumme takaisin kansioon /etc/apache2/sites-available/ ja luomme uuden .conf -tiedoston <a href="h3.html#h3h">aiemmin</a> käytettyjen komentojen tavalla. Kopioin xubtest.com tiedoston ja luon sen pohjalta uuden komennolla</p>
-            <p class="code">sudo cp xubtest.com.conf testagain.com.conf</p>
-            <p>Vaihdan sieltä xubtest.com nimen testagain.comiin. Lataan apache2:n uudelleen komennolla <p class="code">sudo systemctl reload apache2</p><br>
+            <p class="code">$ sudo cp xubtest.com.conf testagain.com.conf</p>
+            <p>Vaihdan sieltä xubtest.com nimen testagain.comiin. Lataan apache2:n uudelleen komennolla <p class="code">$ sudo systemctl reload apache2</p><br>
             <a href="../img/h3/h3img7.jpg"><img src="../img/h3/h3img7.jpg" alt="h3img7"></a><br>
             <p>Luodaan DocumentRootissa viitattu xubuntu/testagain.com -kansio ja sinne index.html tiedosto. Kirjoitetaan <a href="h3.html#h3b">aiemmin</a> käsiteltyyn /etc/hosts tiedostoon tarvittava testagain.com nimi samalla 127.0.0.1-osoitteella. Kokeillaan tätä selaimessa kirjoittamalla osoitekenttään testagain.com ja saadaan eri sivu näkyviin kuin xubtest.com -osoitteella tai localhostilla/IP:llä.</p>
             <a href="../img/h3/h3img8.jpg"><img src="../img/h3/h3img8.jpg" alt="h3img8"></a><br><br>

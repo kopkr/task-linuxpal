@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+    <title>Linux-palvelimet</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="../css/index.css">
+</head>
+<body>
+    <header>
+        <a class="headlink" href="../index.html">
+            <h2>Linux-palvelimet <br>Harjoitus 8</h2>
+            <p>Kristian Koponen</p>
+        </a>
+    </header>
+    <div class="navBar">
+        <ul>
+            <li><a href="h1.html"><b>Harjoitus 1</b><br>Livetikku ja Linuxin testaus</a></li>
+            <li><a href="h2.html"><b>Harjoitus 2</b><br>Lokimuutoksia ja apt-get</a></li>
+            <li><a href="h3.html"><b>Harjoitus 3</b><br>Apache2 asennus, testailu ja lokin tarkastelu</a></li>
+            <li><a href="h4.html"><b>Harjoitus 4</b><br>Virtuaalipalvelin ja nimipalvelu</a></li>
+            <li><a href="h5.html"><b>Harjoitus 5</b><br>Python Flask</a></li>
+            <li><a href="h6.html"><b>Harjoitus 6</b><br>Tietokanta webissä</a></li>
+            <li><a href="h7.html"><b>Harjoitus 7</b><br>Vanha laboratorioharjoitus</a></li>
+            <li><a class="active" href="h8.html"><b>Harjoitus 8</b><br>Prosessinhallintaa ja lokeja</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <h2>Prosessin hallintaa ja lokeja</h2>
+        <span>24.03.2020, Kristian Koponen</span>
+        <div class="blueBox">
+            <h3>Tehtävänanto<br><span class="small"><a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h8">Linux-palvelimet h8</a></span></h3>
+            <ul>
+                <li>
+                    <a href="h8.html#h8a">Kuormitusta yli ajan</a>
+                </li>
+                <li>
+                    <a href="h8.html#h8b">Kuormita järjestelmän eri osa-alueita</a>
+                </li>
+                <li>
+                    <a href="h8.html#h8c">Kokeile käytännössä</a>
+                </li>
+                <li>
+                    <a href="h8.html#h8d">Load average</a>
+                </li>
+            </ul>
+        </div>
+        <div class="blueBox">
+            <h3>Käytetyt laitteet</h3>
+            <p class="bold">Lenovo ThinkPad X220</p>
+            <table>
+                <tr>
+                    <th>Prosessori:</th>
+                    <th>Intel(R) Core(TM) i5-2540M @ 2.60Ghz</th>
+                </tr>
+                <tr>
+                    <th>Keskusmuisti:</th>
+                    <th>4GiB 1333Mhz DDR3</th>
+                </tr>
+                <tr>
+                    <th>Näytönohjain:</th>
+                    <th>Intel HD Graphics 3000</th>
+                </tr>
+                <tr>
+                    <th>Käyttöjärjestelmä:</th>
+                    <th>Windows 10 64-bit</th>
+                </tr>
+            </table>
+            <p class="bold">SanDisk Ultra USB 3.0 32 GB</p><span>xubuntu 18.04.3 amd64 -live</span><br><br>
+        </div>
+        
+        <div class="blueBox">
+            <h3 id="h8a">Kuormitusta yli ajan</h3>
+            <p class="assignment">Tietysti palvelin hidastelee juuri silloin, kun olet nukkumassa. Seuraisipa joku kuormitusta tuolloin. Asenna heti aluksi jokin ohjelma seuraamaan kuormitusta, jotta voit tarkastella sitä koko tehtävän ajalta. Sopivia ohjelmia ovat esimerkiksi 'munin' ja sysstat ('sar').</p>
+            <p>Aiemmassa harjoituksessa asensin Muninin, vaikken sen käyttöön perehtynyt kovin syvällisesti, päätin nyt kokeilla sysstatia. Asennetaan kyseinen ohjelma.</p>
+            <p class="code">$ sudo apt-get install sysstat -y</p>
+            <p>Selvitetään miten sysstatilla saadaan kerättyä tietoa. sysstatin <a href="https://github.com/sysstat/sysstat#readme">github-sivulta</a> saadaan peruskomentoja sysstatin käyttöön.</p>
+            <p class="quote"><strong>sar </strong>collects, reports and saves system activity information (see below a list of metrics collected by sar)</p>
+            <p class="code">
+                $ sar<br>
+                Cannot open /var/log/sysstat/sa24: No such file or directory<br>
+                Please check if data collecting is enabled
+            </p>
+            <p>Selvisi että datankeräys on laitettava konfiguraatiossa päälle.</p>
+            <p class="code">
+                $ sudoedit /etc/default/sysstat
+            </p>
+            <p class="code">
+                #<br>
+                # Default settings for /etc/init.d/sysstat, /etc/cron.d/sysstat<br>
+                # and /etc/cron.daily/sysstat files<br>
+                #<br>
+                <br>
+                # Should sadc collect system activity informations? Valid values<br>
+                # are "true and "false". Please do not put other values, they<br>
+                # will be overwritten by debconf!<br>
+                ENABLED="<span style="color:yellow">true</span>"
+            </p>
+            <p>Täytyy vielä käynnistää sysstat uudelleen.</p>
+            <p class="code">$ sudo service sysstat restart</p>
+            <p>Nyt datankeräys toimii.</p>
+            <p class="code">$ sar</p>
+            <a href="../img/h8/h8img1.jpg"><img src="../img/h8/h8img1.jpg" alt="sar_running"></a><br>
+        </div>
+        <div class="blueBox">
+            <h3 id="h8b">Kuormita järjestelmän eri osa-alueita</h3>
+            <p class="assignment">Kuormita järjestelmän eri osa-alueita. Esim. 'stress'. Etsi prosessi toisesta ikkunasta 'top' tai 'htop', järjestystä voi vaihtaa "P" ja "M".</p>
+            <p>Asennetaan stress- ja htop-ohjelmat</p>
+            <p class="code">$ sudo apt-get install stress htop -y</p>
+            <p>Avataan htop toiseen ikkunaan. Tilanne ennen kuormitusta näyttää tältä. Load Average heittelehtii 0.01 - 0.07 rajamailla ja prosessorin käyttö on lähellä nollaa.</p>
+            <a href="../img/h8/h8img2.jpg"><img src="../img/h8/h8img2.jpg" alt="htop_idle"></a><br>
+            <p>Ajetaan stress-ohjelmalla prosessoriin, I/O:hon ja muistiin vaikuttavia prosesseja 30 sekunnin ajan.</p>
+            <p class="code">
+                $ stress --cpu 8 --io 4 --vm 2 --vm-bytes 128M --timeout 30s<br>
+                stress: info: [5803] dispatching hogs: 8cpu, 4 io, 2 vm, 0 hdd
+            </p>
+            <p>Koneen tuulettimet pärähtävät käyntiin ja htopin mittarit menevät punaiselle, joten päätellään että kuormitus on käynnissä. Alla kuormituksen aikaista tietoa.</p>
+            <a href="../img/h8/h8img3.jpg"><img src="../img/h8/h8img3.jpg" alt="stress_running"></a><br>
+            <p>Load average on noussut lukemaan 7.33 ja prosessorin ytimet kaikki käytössä.</p>
+        </div>
+        <div class="blueBox">
+            <h3 id="h8c">Kokeile käytännössä</h3>
+            <p class="assignment">
+                Kokeile käytännössä, selitä ja analysoi. Muista selittää, mitä komennolla halutaan selvittää ja tulkitse kokeilusi tulokset. Aiheuta tarvittaessa kuormaa tai muuta työkalulla näkyvää tulkittavaa.
+            </p>
+            <p class="assignment indent2">
+                <a href="h8.html#h8c1">iotop; iotop -oa</a>
+            </p>
+            <p class="assignment indent2">
+                <a href="h8.html#h8c2">dstat</a>
+            </p>
+            <p class="assignment indent2">
+                <a href="h8.html#h8c3">
+                    ss --listening --tcp --numeric; ss --listening --tcp; ss --tcp;
+                    ss --listening --udp;</a>
+            </p>
+            <p class="assignment indent2">
+                <a href="h8.html#h8c4">grep -i error /var/log/syslog; grep -ir error /var/log/</a>
+            </p>
+            <h4 id="h8c1">iotop; iotop -oa</h4>
+            <p class="quote">
+                top on komentoriviohjelma, jolla voi interaktiivisesti tarkkailla ja hallita koneella pyöriviä prosesseja. <a href="https://www.linux.fi/wiki/Top"><i>Lähde</i></a>
+            </p>
+            <p class="quote">
+                iotop on komentoriviohjelma, joka näyttää reaaliaikaisesti kunkin prosessin aiheuttaman levyliikenteen top-ohjelman tyylisesti. <a href="https://www.linux.fi/wiki/Iotop"><i>Lähde</i></a>
+            </p>
+            <p>Asennetaan iotop</p>
+            <p class="code">$ sudo apt-get install iotop -y</p>
+            <p>Tarkastellaan iotopin manuaalia selvittääksemme -oa valintojen merkityksen.</p>
+            <p class="code">$ man iotop</p>
+            <p class="quote">
+                -o, --only<br>
+                Only show processes or threads actually doing I/O, instead of showing all processes or threads. This can be dynamically toggled by pressing o.<br>
+                -a, --accumulated<br>
+                Show accumulated I/O instead of bandwidth. In this mode, iotop shows the amount of I/O processes have done since iotop started.<br>
+            </p>
+            <p>-oa valinnoilla saadaan siis I/O-lukemaa iotopin käynnistyksestä lähtien vain niistä prosesseista, jotka suorittavat kirjoittavat tai lukevat sillä hetkellä.</p>
+            <p class="code">$ sudo iotop -oa</p>
+            <p>Alla tilanne, kun koneella ei tehdä juurikaan mitään.</p>
+            <a href="../img/h8/h8img4.jpg"><img src="../img/h8/h8img4.jpg" alt="iotop_idle"></a><br>
+            <p>Käynnistetään Firefox ja selataan ankkakuvia. Katsotaan mitä tapahtuu.</p>
+            <a href="../img/h8/h8img5.jpg"><img src="../img/h8/h8img5.jpg" alt="iotop_firefox"></a><br>
+            <p>Firefox lukee levyltä tietoa.</p>
+            
+            <h4 id="h8c2">dstat</h4>
+            <p class="quote">Dstat on ohjelma, joka näyttää erilaisia tietoja järjestelmästä reaaliajassa. <a href="https://www.linux.fi/wiki/Dstat"><i>Lähde</i></a></p>
+            <p>Tätä laajentaakseni kyseinen tieto on siis prosessorin käyttöä, I/O:ta, verkkoliikennettä ja sivutusta.</p>
+            <p>Asennetaan dstat</p>
+            <p class="code">$ sudo apt-get install dstat -y</p>
+            <p>Tarkastellaan dstat-näkymää, kun ei tehdä mitään.</p>
+            <p class="code">$ dstat</p>
+            <a href="../img/h8/h8img6.jpg"><img src="../img/h8/h8img6.jpg" alt="dstat-idle"></a><br>
+            <p>Asennetaan uusia ohjelmia ja tarkastellaan mitä dstatissa tapahtuu. Syötetään vaikka toisessa harjoituksessa luotu "unelmien apt-get -komento"</p>
+            <p class="code">$ sudo apt-get install vlc ffmpeg gimp blender pinta deluge -y</p>
+            <a href="../img/h8/h8img7.jpg"><img src="../img/h8/h8img7.jpg" alt="dstat-install"></a><br>
+            <p>Verkkoliikenteen lukemat nousevat ja ajoittain myös levyn read-arvo, mutta niin nousee myös prosessoriin toimintaan viittaavat int ja csw arvot.</p>
+            <p>
+                <strong>csw</strong> eli <a href="https://www.computerhope.com/jargon/c/contextsw.htm">Context Switch</a> tarkoittaa sitä kun prosessori vaihtaa yhden prosessin tai ketjun toiseen. Tämän avulla prosessori voi suorittaa useita eri prosesseja samanaikaisesti.<br>
+                <strong>int</strong> eli <a href="https://www.techopedia.com/definition/3373/interrupt-computing">Interrupt</a> tarkoittaa signaalia, joka lopettaa yhden prosessin suorittamisen, että se voi alkaa suorittamaan toista välittömästi.
+            </p>
+            
+            <h4 id="h8c3">ss --listening --tcp --numeric; ss --listening --tcp; ss --tcp; ss --listening --udp;</h4>
+            <p class="code">$ man ss</p>
+            <p class="quote"><strong>ss</strong> is used to dump socket statistics. It allows showing information similar to net-stat. It can display more TCP and state informations than other tools.</p>
+            <p>ss on siis verkkoliikenteen seuraamiseen käytettävä työkalu.</p><br>
+            <p>
+                <strong>--listening, -l</strong> näyttää vain kuunneltavat pistokkeet (eng. socket)<br><br>
+                <strong>--tcp, -t</strong> näyttää vain TCP-pistokkeet<br><br>
+                <strong>--numeric, -n</strong> antaa käytettävät portit numeerisina, nimien sijaan. Esim. 127.0.0.1:ipp > 127.0.0.1:631<br><br>
+                <strong>--udp, -u</strong> näyttää vain UDP-pistokkeet.<br><br>
+            </p>
+            <p>Kokeillaan mitä kuunneltavia TCP-yhteyksiä näkyy.</p>
+            <p class="code">$ ss -t -l -n</p>
+            <a href="../img/h8/h8img8.jpg"><img src="../img/h8/h8img8.jpg" alt="ss_1"></a><br>
+            <p>Yllä olevasta kuvankaappauksesta nähdään myös miten -l ja -n argumentit muuttavat tulostetta.</p>
+            <p>Asennan SSH-demonin, jotta voidaan siirtää harjoituksen aikana otetut kuvankaappaukset SCP:n välityksellä pöytäkoneelle, jolla kirjoitan tätä raporttia. Tarkastellaan uudelleen TCP-yhteyksiä.</p>
+            <a href="../img/h8/h8img9.jpg"><img src="../img/h8/h8img9.jpg" alt="ss_2"></a><br>
+            <p>Tulosteeseen on ilmestynyt kaksi prosessia, jotka kuuntelevat porttia 22.</p>
+            <p>Käytetään pelkkää TCP-argumenttia ja avataan Firefox. Katsotaan mitä näkyy.</p>
+            <p class="code">$ ss -t</p>
+            <a href="../img/h8/h8img10.jpg"><img src="../img/h8/h8img10.jpg" alt="ss_3"></a><br>
+            <p>Näkyy useita http ja https yhteyksiä.</p>
+            <p>Viimeisimpänä tarkastellaan vielä mitä UDP-yhteyksiä ss-työkalulla saadaan.</p>
+            <p class="code">$ ss -l -u</p>
+            <a href="../img/h8/h8img11.jpg"><img src="../img/h8/h8img11.jpg" alt="ss_4"></a><br>
+            
+            <h4 id="h8c4">grep -i error /var/log/syslog; grep -ir error /var/log/</h4>
+            <p>Seuraavalla komennolla haetaan syslokista kaikki rivit joilla lukee "error". -i (--ignore-case) argumentti jättää isot ja pienet kirjaimet huomiotta.</p>
+            <p class="code">$ grep -i error /var/log/syslog</p>
+            <a href="../img/h8/h8img12.jpg"><img src="../img/h8/h8img12.jpg" alt="syslog-error"></a><br>
+            <p>Koneen buuttauksen aikoihin näkyy muutamia kohtia TPM-piirin ja gpu-managerin kanssa. TPM-piirin virheet vaikuttavat hieman huolestuttavilta, mutta käytän harjoituksessa Linux-livetikkua, joten tällä hetkellä asia ei ole painavin. Selvittelen asiaa ja käyn läpi BIOS-asetukset myöhemmin.</p> 
+            <p>Alempana toistuvaa systemd-resolved virheilmoitusta selvittäessäni selvisi, että kyseinen virhe tulee kun DNS-järjestelmä ei kykene selvittämään nimeä. Toistin virheen useaan kertaan kirjoittamalla selvästi virheellisen nimen selaimeen.</p><br>
+            <p>Seuraavalla komennolla haetaan kaikista log-kansiossa olevista tiedostoista error-sanan sisältävät rivit. -r (--recursive) lukee kaikki tiedostot jokaisesta kansiosta rekursiivisesti.</p>
+            <p class="code">$ grep -ir error /var/log/</p>
+            <p>Tällä komennolla saadaan samat virheilmoitukset kuin yllä olevat, mutta myös joitakin apt-get komentojen aiheuttamia virheilmoituksia paketeista.</p>
+
+        </div>
+        <div class="blueBox">
+            <h3 id="h8d">Load average</h3>
+            <p class="assignment">Load average näkyy esim 'uptime', 'top', 'htop'. Prosessoriydinten määrä näkyy 'nproc'. Miten load average tulkitaan? Miksi prosessoriydinten määrä on tässä kiinnostava?</p>
+            <p><strong>uptime</strong> kertoo kellonajan, käynnissäoloajan, kirjautuneet käyttäjät, keskimääräisen kuormituksen (eng. load average) 1, 5 ja 15 minuutin ajalta.</p>
+            <p><strong>nproc</strong> kertoo ydinten määrän.</p>
+            <p>Testataan kuormittamalla konetta ja katsotaan load average</p>
+            <p class="code">$ stress --cpu 8 --io 4 --vm 2 --vm-bytes 128M --timeout 10s<br>$ uptime; nproc</p>
+            <a href="../img/h8/h8img13.jpg"><img src="../img/h8/h8img13.jpg" alt="load average"></a><br>
+            <p>Koneessa on neljä ydintä käytössä. Yhden minuutin aikana load average oli 2.63, joka on neljälle ytimelle jaettuna 66% kuormitus. Kun load average ylittää 4, tulee kone hidastumaan huomattavasti, sillä kaikkia prosesseja ei voida suorittaa. Hyvässä tilanteessa kuormitus ei koskaan ylitä 70%, jotta jäisi hieman suojavaraa.</p>
+        </div>
+        <div class="blueBox">
+            <h3 id="h8e">Lopun kuormitustiedot</h3>
+            <p class="assignment">Analysoi lopuksi koko ajalta keräämäsi kuormitustiedot. Löydätkö esimerkiksi aiheuttamasi kuormituspiikin?</p>
+            <p>Palataan sysstat ohjelmaan ja tarkastellaan harjoituksen aikana kerättyä tietoa.</p>
+            <p class="code">$ sar</p>
+            <a href="../img/h8/h8img14.jpg"><img src="../img/h8/h8img14.jpg" alt="kuormitus"></a><br>
+            <p>
+                <strong>%user</strong> - CPU:n käyttö käyttäjätasolla, eli sovellukset.<br><br>
+                <strong>%nice</strong> - CPU:n käyttö käyttäjätasolla nice-prioriteetilla.<br><br>
+                <strong>%system</strong> - CPU:n käyttö järjestelmätasolla, eli kernel.<br><br>
+                <strong>%iowait</strong> - Aikamäärä kun CPU oli idlenä, kun järjestelmällä oli huomattava määrä I/O -pyyntöjä.<br><br>
+                <strong>%steal</strong> - Aikamäärä kun virtuaali-CPU odotti kun hypervisor palveli toista virtuaaliprosessoria<br><br>
+                <strong>%idle</strong> - Aikamäärä kun CPU oli idlenä, kun järjestelmällä ei ollut huomattavaa määrää I/O -pyyntöjä.<br>
+            </p>
+            <p>sysstat on ottanut tietoa 10 minuutin välein. Valtaosa harjoituksesta on mennyt komentojen ja työkalujen selvittelyyn, sekä raportin kirjoitteluun kakkoskoneella. Harjoitukseen käytetty kone on pyörinyt suurimman osan ajasta idlellä. Silloin tällöin näkyy pientä poikkeamaa sovelluksien ja järjestelmän puolesta kun konetta on kuormitettu.</p>
+            <p>Suurimmat piikit klo. 03:15:01 PM ja 04:05:01 PM</p>
+        </div>
+        <div class="blueBox">
+            <h3>Lähteet</h3>
+            <p>
+                <a href="http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h8">http://terokarvinen.com/2020/linux-palvelimet-2020-alkukevat-kurssi-ict4tn021-3010/#h8</a><br>
+                <a href="https://github.com/sysstat/sysstat#readme">https://github.com/sysstat/sysstat#readme</a><br>
+                <a href="https://arstech.net/how-to-fix-error-please-check-if-data-collecting-is-enabled/">https://arstech.net/how-to-fix-error-please-check-if-data-collecting-is-enabled/</a><br>
+                <a href="https://www.linux.fi/wiki/Top">https://www.linux.fi/wiki/Top</a><br>
+                <a href="https://www.linux.fi/wiki/Iotop">https://www.linux.fi/wiki/Iotop</a><br>
+                <a href="https://www.linux.fi/wiki/Dstat">https://www.linux.fi/wiki/Dstat</a><br>
+                <a href="https://www.networkworld.com/article/3291616/examining-linux-system-performance-with-dstat.html">https://www.networkworld.com/article/3291616/examining-linux-system-performance-with-dstat.html</a><br>
+                <a href="https://www.computerhope.com/jargon/c/contextsw.htm">https://www.computerhope.com/jargon/c/contextsw.htm</a><br>
+                <a href="https://www.techopedia.com/definition/3373/interrupt-computing">https://www.techopedia.com/definition/3373/interrupt-computing</a><br>
+                <a href="https://linux.die.net/man/8/ss">https://linux.die.net/man/8/ss</a><br>
+                <a href="https://scoutapm.com/blog/understanding-load-averages">https://scoutapm.com/blog/understanding-load-averages</a><br>
+                
+            </p>
+        </div>
+    </div>
+</body>
+</html>
